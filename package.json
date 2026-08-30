@@ -1,0 +1,15 @@
+{
+  "name": "fullstack-dashboard",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm start",
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview",
+    "install:all": "cd frontend && npm install && cd ../backend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
