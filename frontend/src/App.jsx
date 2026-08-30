@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
+// Use absolute URL in production, relative in development
+const API_BASE = import.meta.env.PROD 
+  ? 'http://localhost:3001/api'
+  : '/api';
+
 function App() {
   const [backendStatus, setBackendStatus] = useState('Checking...');
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/health')
+    // Check backend health using absolute URL in production
+    fetch(`${API_BASE}/health`)
       .then(res => res.json())
       .then(data => setBackendStatus(data.message || 'OK'))
       .catch(() => setBackendStatus('Backend not reachable'));
 
-    fetch('/api/data')
+    // Fetch sample data
+    fetch(`${API_BASE}/data`)
       .then(res => res.json())
       .then(data => {
         setData(data.items || []);
