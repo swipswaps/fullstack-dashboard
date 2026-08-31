@@ -12,7 +12,7 @@ function App() {
   const [processDetail, setProcessDetail] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
 
-  // Check backend health on mount – receipts-ocr style
+  // Check backend health
   useEffect(() => {
     const checkBackend = () => {
       fetch(`${API_BASE}/health`)
@@ -66,8 +66,6 @@ function App() {
   };
 
   const projectPath = '/home/owner/Documents/6a9447c0-d534-83ea-b2c7-9ba48762a252/repo/fullstack-dashboard';
-
-  // Determine if running on GitHub Pages
   const isGitHubPages = window.location.hostname.includes('github.io');
 
   return (
@@ -126,6 +124,7 @@ function App() {
 
         {loading && <p>Loading...</p>}
 
+        {/* Forensic Report */}
         {forensic && (
           <div className="forensic-card">
             <h3>Forensic Report</h3>
@@ -143,6 +142,7 @@ CPUs: {forensic.system?.cpus}</pre>
           </div>
         )}
 
+        {/* Process List */}
         {processes.length > 0 && (
           <div className="process-card">
             <h3>Process List (by CPU)</h3>
@@ -166,6 +166,7 @@ CPUs: {forensic.system?.cpus}</pre>
           </div>
         )}
 
+        {/* Process Detail */}
         {processDetail && (
           <div className="detail-card">
             <h3>Process Detail: PID {selectedPid}</h3>

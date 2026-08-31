@@ -95,7 +95,7 @@ h3 { color: #ffcc00; margin-top: 1.5rem; }
   color: #ccc;
 }
 
-.status-card, .forensic-card, .process-card, .detail-card {
+.forensic-card, .process-card, .detail-card {
   background: #2a2a40;
   border-radius: 12px;
   padding: 1.5rem;
