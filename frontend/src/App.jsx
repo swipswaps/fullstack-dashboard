@@ -12,7 +12,6 @@ function App() {
   const [processDetail, setProcessDetail] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
 
-  // Check backend health
   useEffect(() => {
     const checkBackend = () => {
       fetch(`${API_BASE}/health`)
@@ -74,7 +73,6 @@ function App() {
         <h1>🔬 System Resource Forensic Dashboard</h1>
         <p>Live system monitoring & forensic audit tools</p>
 
-        {/* Backend status banner – receipts-ocr style */}
         <div className={`status-banner ${backendStatus}`}>
           {backendStatus === 'checking' && '⏳ Checking backend connection...'}
           {backendStatus === 'online' && (
@@ -124,7 +122,6 @@ function App() {
 
         {loading && <p>Loading...</p>}
 
-        {/* Forensic Report */}
         {forensic && (
           <div className="forensic-card">
             <h3>Forensic Report</h3>
@@ -142,7 +139,6 @@ CPUs: {forensic.system?.cpus}</pre>
           </div>
         )}
 
-        {/* Process List */}
         {processes.length > 0 && (
           <div className="process-card">
             <h3>Process List (by CPU)</h3>
@@ -166,7 +162,6 @@ CPUs: {forensic.system?.cpus}</pre>
           </div>
         )}
 
-        {/* Process Detail */}
         {processDetail && (
           <div className="detail-card">
             <h3>Process Detail: PID {selectedPid}</h3>
