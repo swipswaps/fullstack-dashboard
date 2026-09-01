@@ -1,0 +1,251 @@
+=== pages_ground_truth.sh - 20260901133458 UTC ===
+project_root: /home/owner/Documents/6a9447c0-d534-83ea-b2c7-9ba48762a252/repo/fullstack-dashboard
+owner_repo:   swipswaps/fullstack-dashboard
+pages_url:    https://swipswaps.github.io/fullstack-dashboard/
+
+=== A1. PAGES SITE CONFIG (gh api repos/swipswaps/fullstack-dashboard/pages) ===
+{"url":"https://api.github.com/repos/swipswaps/fullstack-dashboard/pages","status":"built","cname":null,"custom_404":false,"html_url":"https://swipswaps.github.io/fullstack-dashboard/","build_type":"workflow","source":{"branch":"main","path":"/"},"public":true,"protected_domain_state":null,"pending_domain_unverified_at":null,"https_enforced":true}
+=== A2. LEGACY BUILD RECORD (pages/builds/latest) ===
+NOTE: this endpoint reports the BRANCH-based builder. A "built" status
+here does NOT mean the Actions workflow deployed. Compare created_at
+below against the workflow run times in section B.
+{"url":"https://api.github.com/repos/swipswaps/fullstack-dashboard/pages/builds/1184311352","status":"built","error":{"message":null},"pusher":{"login":"swipswaps","id":15093666,"node_id":"MDQ6VXNlcjE1MDkzNjY2","avatar_url":"https://avatars.githubusercontent.com/u/15093666?v=4","gravatar_id":"","url":"https://api.github.com/users/swipswaps","html_url":"https://github.com/swipswaps","followers_url":"https://api.github.com/users/swipswaps/followers","following_url":"https://api.github.com/users/swipswaps/following{/other_user}","gists_url":"https://api.github.com/users/swipswaps/gists{/gist_id}","starred_url":"https://api.github.com/users/swipswaps/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/swipswaps/subscriptions","organizations_url":"https://api.github.com/users/swipswaps/orgs","repos_url":"https://api.github.com/users/swipswaps/repos","events_url":"https://api.github.com/users/swipswaps/events{/privacy}","received_events_url":"https://api.github.com/users/swipswaps/received_events","type":"User","user_view_type":"public","site_admin":false},"commit":"8f264a5390451068b6199c6629e34343325a26cd","duration":39143,"created_at":"2026-08-30T18:57:44Z","updated_at":"2026-08-30T18:58:23Z"}
+=== B1. RECENT ACTIONS RUNS (gh run list --limit 10) ===
+completed	success	Force redeploy for backend detection fix	Deploy to GitHub Pages	main	push	33415385769	26s	2026-08-31T16:40:15Z
+completed	success	Fix: use absolute URL for backend detection on GitHub Pages	Deploy to GitHub Pages	main	push	33333867925	26s	2026-08-30T20:31:13Z
+completed	success	Add permanent deploy and run script	Deploy to GitHub Pages	main	push	33333664395	30s	2026-08-30T20:26:45Z
+completed	success	Deploy to GitHub Pages	Deploy to GitHub Pages	main	workflow_dispatch	33329710436	26s	2026-08-30T19:01:46Z
+completed	success	Deploy to GitHub Pages	Deploy to GitHub Pages	main	workflow_dispatch	33329539261	28s	2026-08-30T18:58:01Z
+completed	success	pages build and deployment	pages-build-deployment	main	dynamic	33329527139	46s	2026-08-30T18:57:45Z
+completed	failure	Deploy to GitHub Pages	Deploy to GitHub Pages	main	workflow_dispatch	33329217325	24s	2026-08-30T18:50:43Z
+completed	failure	Deploy to GitHub Pages	Deploy to GitHub Pages	main	workflow_dispatch	33328812884	24s	2026-08-30T18:41:54Z
+completed	failure	Add self-contained deploy script to repo	Deploy to GitHub Pages	main	push	33328793385	22s	2026-08-30T18:41:30Z
+completed	failure	Deploy to GitHub Pages	Deploy to GitHub Pages	main	workflow_dispatch	33328389582	22s	2026-08-30T18:33:04Z
+
+=== B2. LATEST RUN JOB CONCLUSIONS ===
+latest_run_id: 33415385769
+{"conclusion":"success","name":"build","status":"completed"}
+{"conclusion":"success","name":"deploy","status":"completed"}
+
+--- failed step logs (if any) ---
+
+=== B3. WORKFLOW FILES PRESENT ON DISK ===
+ls: cannot access '.github/workflows/': No such file or directory
+.github/workflows/ MISSING
+
+--- committed workflow files (git ls-files) ---
+
+=== C1. LIVE PAGE HTTP HEADERS ===
+HTTP/2 200 
+server: GitHub.com
+content-type: text/html; charset=utf-8
+last-modified: Mon, 31 Aug 2026 16:40:33 GMT
+access-control-allow-origin: *
+etag: "6a95ae81-206"
+expires: Tue, 01 Sep 2026 13:40:32 GMT
+cache-control: max-age=600
+x-proxy-cache: MISS
+x-github-request-id: 9536:4CC07:14263D2:16D2BEE:6A96D378
+x-github-edge-region: iad
+accept-ranges: bytes
+age: 0
+date: Tue, 01 Sep 2026 13:30:32 GMT
+via: 1.1 varnish
+x-served-by: cache-jax2030026-JAX
+x-cache: MISS
+x-cache-hits: 0
+x-timer: S1788269433.623399,VS0,VE212
+vary: Accept-Encoding
+x-fastly-request-id: d49155af701bb0e686268fed14bcc68ce30da9af
+content-length: 518
+
+
+=== C2. LIVE PAGE BODY (saved to notes/served_index_20260901133458.html) ===
+served bytes: 518
+--- first 60 lines ---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/fullstack-dashboard/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend</title>
+    <script type="module" crossorigin src="/fullstack-dashboard/assets/index-C9rVTRgv.js"></script>
+    <link rel="stylesheet" crossorigin href="/fullstack-dashboard/assets/index-CcgFANNe.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+
+--- marker counts in SERVED HTML ---
+Sample Data:            0
+Forensic Dashboard:     0
+jekyll/GitHub Pages tag:0
+
+=== C3. ASSET BUNDLE REFERENCED BY THE LIVE PAGE ===
+assets referenced:
+/fullstack-dashboard/assets/index-C9rVTRgv.js
+/fullstack-dashboard/assets/index-CcgFANNe.css
+
+--- https://swipswaps.github.io/fullstack-dashboard/assets/index-C9rVTRgv.js ---
+http_status: HTTP_STATUS:200
+bytes: 191992
+contains "Sample Data":          1
+contains "Process List (by CPU)":0
+contains "Run Forensic Audit":   0
+
+--- https://swipswaps.github.io/fullstack-dashboard/assets/index-CcgFANNe.css ---
+http_status: HTTP_STATUS:200
+bytes: 2438
+contains "Sample Data":          0
+contains "Process List (by CPU)":0
+contains "Run Forensic Audit":   0
+
+
+=== D1. REPO ROOT LISTING ===
+total 44
+drwxr-xr-x. 1 owner owner   204 Sep  1 09:34 .
+drwxr-xr-x. 1 owner owner   214 Aug 30 19:12 ..
+drwxr-xr-x. 1 owner owner   100 Aug 31 13:15 backend
+drwxr-xr-x. 1 owner owner   214 Aug 31 13:14 frontend
+drwxr-xr-x. 1 owner owner   128 Aug 31 18:38 .git
+drwxr-xr-x. 1 owner owner   596 Aug 30 14:09 node_modules
+-rw-r--r--. 1 owner owner     0 Aug 31 18:34 .nojekyll
+drwxr-xr-x. 1 owner owner   138 Sep  1 09:35 notes
+-rw-r--r--. 1 owner owner   409 Aug 31 18:23 package.json
+-rw-r--r--. 1 owner owner 12716 Aug 31 09:05 package-lock.json
+-rwxr-xr-x. 1 owner owner 20562 Sep  1 09:34 pages_ground_truth.sh
+drwxr-xr-x. 1 owner owner   344 Aug 31 18:38 scripts
+
+=== D2. ROOT-LEVEL AND docs/ CANDIDATES THAT PAGES COULD BE SERVING ===
+tracked root index.html: 0
+tracked docs/ files:     0
+tracked .nojekyll:       1
+tracked frontend/dist:   0
+
+--- if a root index.html is tracked, its first 40 lines ---
+(no root index.html on disk)
+
+=== D3. REMOTE BRANCHES (is there a gh-pages branch?) ===
+5dca19deb660097ee8aa882233a848de52c66afe	refs/heads/main
+
+=== D4. LOCAL vs REMOTE HEAD ===
+From https://github.com/swipswaps/fullstack-dashboard
+ * branch            main       -> FETCH_HEAD
+local  HEAD: 5dca19deb660097ee8aa882233a848de52c66afe
+origin/main: 5dca19deb660097ee8aa882233a848de52c66afe
+
+--- git status --short ---
+ M frontend/src/App.jsx
+?? backend/node_modules/
+?? notes/
+?? pages_ground_truth.sh
+?? scripts/
+
+--- git log --oneline -15 ---
+5dca19d force: cache bust with .nojekyll and timestamp 1788215695
+01c58ae force: cache bust 1788215257
+f4b6811 ci: cache bust 1788214618
+f7072b1 force: replace sample UI with full forensic dashboard
+57ca7bd feat: restore full forensic UI with backend guidance banner
+a5e965c feat: add backend status banner with guidance (receipts-ocr style)
+8984218 Replace sample dashboard with System Resource Forensic Dashboard
+19ae008 Force redeploy for backend detection fix
+29d1877 Fix: use absolute URL for backend detection on GitHub Pages
+fbdeaf9 Add permanent deploy and run script
+8f264a5 Add self-contained deploy script to repo
+2b24e74 ci: update Node.js to v22 for Vite 8 compatibility
+a1e6d0a Update full‑stack dashboard
+cc35dd1 Update full‑stack dashboard (frontend + backend)
+
+=== D5. APP SOURCE ON THE REMOTE (not the working copy) ===
+--- git show origin/main:frontend/src/App.jsx | head -25 ---
+import React, { useState, useEffect } from 'react';
+import './App.css';
+
+const API_BASE = import.meta.env.PROD ? 'http://localhost:3001/api' : '/api';
+
+function App() {
+  const [backendStatus, setBackendStatus] = useState('checking');
+  const [processes, setProcesses] = useState([]);
+  const [forensic, setForensic] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [selectedPid, setSelectedPid] = useState(null);
+  const [processDetail, setProcessDetail] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => {
+    const checkBackend = () => {
+      fetch(`${API_BASE}/health`)
+        .then(r => {
+          if (r.ok) {
+            setBackendStatus('online');
+            setRetryCount(0);
+          } else {
+            setBackendStatus('offline');
+            setRetryCount(prev => prev + 1);
+          }
+
+--- marker counts in origin/main:frontend/src/App.jsx ---
+Sample Data:   0
+Process List:  1
+
+=== D6. VITE CONFIG (base must match /fullstack-dashboard/ for a project page) ===
+import { defineConfig } from 'vite'$
+import react from '@vitejs/plugin-react'$
+$
+export default defineConfig(({ mode }) => ({$
+  plugins: [react()],$
+  base: mode === 'production' ? '/forensic-dashboard/' : '/',$
+  server: {$
+    proxy: {$
+      '/api': {$
+        target: 'http://localhost:3001',$
+        changeOrigin: true,$
+      }$
+    }$
+  }$
+}))$
+
+--- frontend/package.json ---
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lucide-react": "^1.38.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "recharts": "^3.10.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "oxlint": "^1.79.0",
+    "vite": "^8.2.2"
+  }
+}
+
+=== D7. GITIGNORE AUDIT (Rule #45) ===
+--- frontend/src/App.jsx ---
+not ignored
+--- frontend/vite.config.js ---
+not ignored
+--- .github/workflows/deploy.yml ---
+not ignored
+--- frontend/package-lock.json ---
+not ignored
+
+--- .gitignore contents ---
+(no .gitignore)
+
+=== END DIAGNOSTIC ===
