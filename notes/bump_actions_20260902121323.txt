@@ -1,0 +1,21 @@
+=== bump_actions_node24.sh - 20260902121323 UTC ===
+owner_repo: swipswaps/fullstack-dashboard
+changed:    1
+
+=== B1. WORKFLOW AFTER BUMP ===
+     17:       - uses: actions/checkout@v5
+     18:       - uses: actions/setup-node@v5
+     29:         uses: actions/upload-pages-artifact@v5
+     41:         uses: actions/deploy-pages@v5
+
+=== B2. STATIC VALIDATION ===
+SKIP: actionlint not installed (Rule #37 - SKIP, never PASS)
+Install: go install github.com/rhysd/actionlint/cmd/actionlint@latest
+YAML OK
+
+--- load-bearing fields must be unchanged ---
+upload path   : 1  (want 1)
+lock path     : 1  (want 1)
+node-version  : 1  (want 1)
+
+=== END PRE-PUSH REPORT ===
