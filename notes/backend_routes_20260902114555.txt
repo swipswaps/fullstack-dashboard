@@ -1,0 +1,49 @@
+=== backend_routes.sh - 20260902114555 UTC ===
+project_root: /home/owner/Documents/6a9447c0-d534-83ea-b2c7-9ba48762a252/repo/fullstack-dashboard
+base url:     http://localhost:3001
+
+=== 1. IS ANYTHING LISTENING ON 3001? ===
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+
+=== 2. ROUTES ACTUALLY REGISTERED IN backend/server.js ===
+This is the ground truth. Anything not listed here will 404.
+
+     20: GET    /api/processes
+     43: GET    /api/process/:pid
+     70: GET    /api/forensic
+    101: GET    /api/health
+    105: GET    /api/data
+
+  total explicit route registrations: 5
+
+=== 3. LIVE PROBES (real status codes, real bodies) ===
+head: cannot open '/tmp/probe_body_3629638' for reading: No such file or directory
+/                            HTTP 000  
+head: cannot open '/tmp/probe_body_3629638' for reading: No such file or directory
+/api                         HTTP 000  
+head: cannot open '/tmp/probe_body_3629638' for reading: No such file or directory
+/api/health                  HTTP 000  
+head: cannot open '/tmp/probe_body_3629638' for reading: No such file or directory
+/api/processes               HTTP 000  
+head: cannot open '/tmp/probe_body_3629638' for reading: No such file or directory
+/api/forensic                HTTP 000  
+head: cannot open '/tmp/probe_body_3629638' for reading: No such file or directory
+/health                      HTTP 000  
+
+=== 4. WHAT THE FRONTEND ACTUALLY CALLS ===
+--- API_BASE and every fetch() in App.jsx ---
+      4: const API_BASE = import.meta.env.PROD ? 'http://localhost:3001/api' : '/api';
+     17:       fetch(`${API_BASE}/health`)
+     39:     fetch(`${API_BASE}/processes`)
+     50:     fetch(`${API_BASE}/forensic`)
+     61:     fetch(`${API_BASE}/process/${pid}`)
+
+=== 5. MIXED-CONTENT CHECK (why the deployed page cannot reach this) ===
+The published site is https://swipswaps.github.io/... over HTTPS.
+A browser blocks an HTTPS page from fetching an http:// origin.
+If the API_BASE line above selects http://localhost:3001 when PROD is
+true, the deployed dashboard can never reach this backend, no matter
+what is running locally. Count of http://localhost in App.jsx:
+  1
+
+=== END REPORT ===
