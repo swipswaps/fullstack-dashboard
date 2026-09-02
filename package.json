@@ -8,6 +8,7 @@
     "install:all": "cd frontend && npm install && cd ../backend && npm install"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "playwright": "1.62.1"
   }
 }

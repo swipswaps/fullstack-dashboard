@@ -1,0 +1,40 @@
+=== verify_browser.sh - 20260902194331 UTC ===
+owner_repo: swipswaps/fullstack-dashboard
+pages_url : https://swipswaps.github.io/fullstack-dashboard/
+playwright installed this run: 1   importable: 1
+
+=== C. BACKEND (polled, so the loopback probe means something) ===
+backend ready after 5 attempt(s), pid 187451
+--- backend log ---
+Forensic Dashboard backend listening on port 3001
+BACKEND_RESULT: READY
+
+=== D. REAL BROWSER AGAINST THE DEPLOYED PAGE ===
+  PASS  page navigation succeeded :: ok
+  PASS  page responds 200 :: HTTP 200
+  PASS  page is not blank (React mounted) :: #root inner length 388
+  PASS  every js/css asset returned 200 :: 200 index-CEZk7czg.css, 200 index-Cj3eyInJ.js
+  PASS  dashboard heading rendered :: 🔬 System Resource Forensic Dashboard
+  INFO  loopback probe -> HTTP 200 :: {"status":"ok","message":"Forensic Dashboard backend is runn
+  PASS  no address-space MISMATCH (the wrong-value symptom) :: none
+  --- failed requests ---
+    (none)
+  --- console (first 15) ---
+    (none)
+  --- visible text (first 400 chars) ---
+    🔬 System Resource Forensic Dashboard
+    
+    Live system monitoring & forensic audit tools
+    
+    ✅ Backend is running – full functionality available
+    Refresh ProcessesRun Forensic Audit
+  screenshot: notes/browser_20260902194331.png
+
+browser_check: 0 failure(s)
+
+browser_check exit: 0
+BROWSER_RESULT: PASS
+
+backend stopped.
+
+=== END REPORT ===
