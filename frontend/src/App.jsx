@@ -3,6 +3,31 @@ import './App.css';
 
 const API_BASE = import.meta.env.PROD ? 'http://localhost:3001/api' : '/api';
 
+// Chromium 142+ Local Network Access. Annotating the request with
+// targetAddressSpace tells the browser the target is loopback BEFORE DNS
+// resolution, which is what exempts it from the mixed-content check when an
+// HTTPS page (github.io) calls http://localhost. Browsers that do not know
+// the option ignore it, so this is safe everywhere; on Firefox and Safari the
+// call simply fails and the banner reports the backend as offline, which is
+// the truthful result there.
+const LOCAL_FETCH_INIT = { targetAddressSpace: 'local' };
+
+// Distinguishes "backend is not running" from "the browser refused to let this
+// page talk to loopback". Both surface as TypeError from fetch, so the page
+// protocol is what separates them.
+export function classifyFetchFailure() {
+  const pageIsHttps =
+    typeof window !== 'undefined' && window.location.protocol === 'https:';
+  const apiIsHttp = API_BASE.startsWith('http://');
+  return pageIsHttps && apiIsHttp ? 'blocked' : 'offline';
+}
+
+function apiFetch(url, init) {
+  // Spreading undefined yields {}, so no fallback is needed here; adding one
+  // trips unicorn/no-useless-fallback-in-spread in this project's oxlint config.
+  return fetch(url, { ...LOCAL_FETCH_INIT, ...init });
+}
+
 function App() {
   const [backendStatus, setBackendStatus] = useState('checking');
   const [processes, setProcesses] = useState([]);
@@ -14,7 +39,7 @@ function App() {
 
   useEffect(() => {
     const checkBackend = () => {
-      fetch(`${API_BASE}/health`)
+      apiFetch(`${API_BASE}/health`)
         .then(r => {
           if (r.ok) {
             setBackendStatus('online');
@@ -36,7 +61,7 @@ function App() {
 
   const fetchProcesses = () => {
     setLoading(true);
-    fetch(`${API_BASE}/processes`)
+    apiFetch(`${API_BASE}/processes`)
       .then(r => r.json())
       .then(data => {
         setProcesses(data.processes || []);
@@ -47,7 +72,7 @@ function App() {
 
   const runForensic = () => {
     setLoading(true);
-    fetch(`${API_BASE}/forensic`)
+    apiFetch(`${API_BASE}/forensic`)
       .then(r => r.json())
       .then(data => {
         setForensic(data);
@@ -58,7 +83,7 @@ function App() {
 
   const fetchProcessDetail = (pid) => {
     setSelectedPid(pid);
-    fetch(`${API_BASE}/process/${pid}`)
+    apiFetch(`${API_BASE}/process/${pid}`)
       .then(r => r.json())
       .then(data => setProcessDetail(data))
       .catch(() => setProcessDetail(null));
@@ -182,4 +207,3 @@ CPUs: {forensic.system?.cpus}</pre>
 }
 
 export default App;
-// CACHE_BUST: 1788215695

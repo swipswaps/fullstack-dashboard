@@ -1,0 +1,133 @@
+=== fix_repo_and_detection.sh - 20260902124515 UTC ===
+owner_repo: swipswaps/fullstack-dashboard
+retired=9 gate=1 backend=1 frontend=1
+
+=== E1. BACKEND PREFLIGHT - REAL REQUESTS AGAINST THE REAL SERVER ===
+Starting backend/server.js on 3001...
+backend pid: 3648354
+--- backend stdout/stderr ---
+
+--- E1a. preflight from the Pages origin (want 204 + allow-private-network) ---
+(no headers - request failed)
+
+--- E1b. real GET carries the CORS header (want 200 + allow-origin) ---
+(request failed)
+
+--- E1c. an unlisted origin must NOT be echoed (want 0) ---
+allow-origin headers for https://evil.example: 0
+
+--- E1d. every registered route still answers ---
+/api/health        HTTP 000
+/api/processes     HTTP 000
+/api/forensic      HTTP 000
+/api/data          HTTP 000
+
+backend stopped.
+
+=== E2. FRONTEND PATCH VISIBLE IN SOURCE ===
+      4: const API_BASE = import.meta.env.PROD ? 'http://localhost:3001/api' : '/api';
+      7: // targetAddressSpace tells the browser the target is loopback BEFORE DNS
+     13: const LOCAL_FETCH_INIT = { targetAddressSpace: 'local' };
+     18: export function classifyFetchFailure() {
+     25: function apiFetch(url, init) {
+     42:       apiFetch(`${API_BASE}/health`)
+     64:     apiFetch(`${API_BASE}/processes`)
+     75:     apiFetch(`${API_BASE}/forensic`)
+     86:     apiFetch(`${API_BASE}/process/${pid}`)
+
+bare fetch(`${API_BASE} remaining (want 0): 0
+apiFetch(`${API_BASE} call sites (want 4)  : 4
+
+=== E3. FRONTEND BUILD ===
+
+> frontend@0.0.0 build
+> vite build
+
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.51 kB │ gzip:  0.31 kB
+dist/assets/index-CEZk7czg.css    4.04 kB │ gzip:  1.46 kB
+dist/assets/index-CF398QfR.js   195.64 kB │ gzip: 61.75 kB
+
+✓ built in 3.11s
+
+asset refs containing /fullstack-dashboard/ : 3
+targetAddressSpace in bundle : 1
+Process List in bundle       : 1
+
+=== F. REPO-WIDE GATES (were 81 violations across 14 files) ===
+files under gate: 9
+
+
+rules_gate: 0 violation(s) across 9 file(s)
+rules_gate exit: 0
+
+js linter: /home/owner/Documents/6a9447c0-d534-83ea-b2c7-9ba48762a252/repo/fullstack-dashboard/frontend/node_modules/.bin/oxlint
+js linter config: /home/owner/Documents/6a9447c0-d534-83ea-b2c7-9ba48762a252/repo/fullstack-dashboard/frontend/.oxlintrc.json
+
+=== artifacts emitted by ./backend_routes.sh ===
+  (no quoted heredocs found)
+
+=== artifacts emitted by ./bump_actions_node24.sh ===
+  (no quoted heredocs found)
+
+=== artifacts emitted by ./deploy_fix.sh ===
+
+- $STAGING/deploy.yml  (lines 168-210, 945 bytes)
+  PASS  $STAGING/deploy.yml (YAML parse)
+
+=== artifacts emitted by ./fix_repo_and_detection.sh ===
+
+- $STAGING/artifact_gate.sh  (lines 204-511, 11936 bytes)
+  PASS  $STAGING/artifact_gate.sh (bash -n)
+  PASS  $STAGING/artifact_gate.sh (shellcheck)
+  PASS  $STAGING/artifact_gate.sh (rules_gate)
+
+=== artifacts emitted by ./install_enforcement.sh ===
+
+- $STAGING/rules_gate.sh  (lines 191-355, 7181 bytes)
+  PASS  $STAGING/rules_gate.sh (bash -n)
+  PASS  $STAGING/rules_gate.sh (shellcheck)
+  PASS  $STAGING/rules_gate.sh (rules_gate)
+
+- $STAGING/artifact_gate.sh  (lines 358-591, 8946 bytes)
+  PASS  $STAGING/artifact_gate.sh (bash -n)
+  PASS  $STAGING/artifact_gate.sh (shellcheck)
+  PASS  $STAGING/artifact_gate.sh (rules_gate)
+
+- $STAGING/eslint.config.js  (lines 595-646, 1868 bytes)
+  PASS  $STAGING/eslint.config.js (node --check)
+  PASS  $STAGING/eslint.config.js (oxlint no-undef (/home/owner/Documents/6a9447c0-d534-83ea-b2c7-9ba48762a252/repo/fullstack-dashboard/frontend/node_modules/.bin/oxlint))
+
+- $STAGING/pre-commit-config.yaml  (lines 650-689, 1059 bytes)
+  PASS  $STAGING/pre-commit-config.yaml (YAML parse)
+
+- $STAGING/gates.bats  (lines 693-777, 2826 bytes)
+  PASS  $STAGING/gates.bats (non-empty (no validator for .bats))
+
+=== artifacts emitted by ./pages_ground_truth.sh ===
+  (no quoted heredocs found)
+
+=== artifacts emitted by ./repair_and_unblock.sh ===
+
+- $STAGING/artifact_gate.sh  (lines 155-426, 10479 bytes)
+  PASS  $STAGING/artifact_gate.sh (bash -n)
+  PASS  $STAGING/artifact_gate.sh (shellcheck)
+  PASS  $STAGING/artifact_gate.sh (rules_gate)
+
+- $STAGING/gates.bats  (lines 430-521, 3159 bytes)
+  PASS  $STAGING/gates.bats (non-empty (no validator for .bats))
+
+=== artifacts emitted by scripts/artifact_gate.sh ===
+  (no quoted heredocs found)
+
+=== artifacts emitted by scripts/rules_gate.sh ===
+  (no quoted heredocs found)
+
+artifact_gate: 9 artifact(s) checked, 0 failure(s)
+artifact_gate exit: 0
+
+=== END PRE-PUSH REPORT ===

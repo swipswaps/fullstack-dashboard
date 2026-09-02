@@ -4,6 +4,39 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const os = require('os');
 const app = express();
+
+// --- CORS + Local Network Access -----------------------------------------
+// The published dashboard is served over HTTPS from *.github.io and calls
+// http://localhost:3001. Chromium 142+ gates that behind Local Network Access:
+// the browser sends a preflight and the loopback server must opt in, or the
+// request never reaches these routes. Firefox and Safari do not implement LNA,
+// so the page there will correctly report the backend as offline.
+// Verified with real preflights: an allowed origin receives
+// Access-Control-Allow-Private-Network: true; an unlisted origin receives no
+// Access-Control-Allow-Origin at all.
+const LNA_ALLOWED_ORIGIN = /^https:\/\/[a-z0-9-]+\.github\.io$/i;
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && (LNA_ALLOWED_ORIGIN.test(origin) ||
+                 origin.startsWith('http://localhost'))) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    if (req.headers['access-control-request-private-network'] === 'true') {
+      res.setHeader('Access-Control-Allow-Private-Network', 'true');
+    }
+    if (req.headers['access-control-request-local-network'] === 'true') {
+      res.setHeader('Access-Control-Allow-Local-Network', 'true');
+    }
+    res.setHeader('Access-Control-Max-Age', '600');
+    return res.status(204).end();
+  }
+  return next();
+});
+// --- end CORS + Local Network Access --------------------------------------
 const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
