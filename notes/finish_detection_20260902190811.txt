@@ -93,3 +93,150 @@ artifact_gate exit 0 in 43s
 ARTIFACT_GATE_RESULT: PASS
 
 === END PRE-PUSH REPORT ===
+
+=== V1. WORKFLOW RUN ===
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33671087337
+Triggered via push about 5 minutes ago
+
+JOBS
+* build (ID 100384587950)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  * Install and Build
+  * Upload artifact
+  * Post Run actions/setup-node@v5
+  * Post Run actions/checkout@v5
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33671087337
+Triggered via push about 5 minutes ago
+
+JOBS
+* build (ID 100384587950)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  * Install and Build
+  * Upload artifact
+  * Post Run actions/setup-node@v5
+  * Post Run actions/checkout@v5
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33671087337
+Triggered via push about 5 minutes ago
+
+JOBS
+* build (ID 100384587950)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  * Post Run actions/checkout@v5
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33671087337
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 20s (ID 100384587950)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+* deploy (ID 100384715840)
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33671087337
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 20s (ID 100384587950)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+* deploy (ID 100384715840)
+  ✓ Set up job
+  * Deploy to GitHub Pages
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33671087337
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 20s (ID 100384587950)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+* deploy (ID 100384715840)
+  ✓ Set up job
+  * Deploy to GitHub Pages
+✓ main Deploy to GitHub Pages · 33671087337
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 20s (ID 100384587950)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+✓ deploy in 10s (ID 100384715840)
+  ✓ Set up job
+  ✓ Deploy to GitHub Pages
+  ✓ Complete job
+{"conclusion":"success","name":"build"}
+{"conclusion":"success","name":"deploy"}
+
+=== V2. DEPLOYED BUNDLE ===
+bundle: https://swipswaps.github.io/fullstack-dashboard/assets/index-Cj3eyInJ.js
+  'loopback'     : 1   (want >= 1)
+  "Process List" : 1   (want >= 1)
+  "Sample Data"  : 0   (want 0)
+
+=== V3. REAL BROWSER ===
+Start the backend in another terminal first if you want the loopback
+probe to reach it: npm run dev:backend
+
+Version 1.62.1
+node:internal/modules/package_json_reader:314
+  throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);
+        ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'playwright' imported from /home/owner/Documents/6a9447c0-d534-83ea-b2c7-9ba48762a252/repo/fullstack-dashboard/tests/browser_check.mjs
+    at Object.getPackageJSONURL (node:internal/modules/package_json_reader:314:9)
+    at packageResolve (node:internal/modules/esm/resolve:768:81)
+    at moduleResolve (node:internal/modules/esm/resolve:855:18)
+    at defaultResolve (node:internal/modules/esm/resolve:985:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:731:20)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:708:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:310:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:182:49) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}
+
+Node.js v22.22.2
+browser_check exit: 1
+
+=== END POST-PUSH REPORT ===
