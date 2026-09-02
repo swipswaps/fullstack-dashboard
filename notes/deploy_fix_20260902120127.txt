@@ -61,3 +61,143 @@ HTTPS page cannot fetch it (mixed content) and will show the backend-
 offline banner. That is a product decision, not a deployment bug.
 
 === END PRE-PUSH REPORT ===
+
+=== V1. WORKFLOW RUN TRIGGERED BY THIS PUSH ===
+Waiting for the run to be registered...
+in_progress		fix(deploy): restore Pages workflow and correct vite base to /fullsta…	Deploy to GitHub Pages	main	push	33627394623	4m58s	2026-09-02T11:58:31Z
+completed	success	Force redeploy for backend detection fix	Deploy to GitHub Pages	main	push	33415385769	26s	2026-08-31T16:40:15Z
+completed	success	Fix: use absolute URL for backend detection on GitHub Pages	Deploy to GitHub Pages	main	push	33333867925	26s	2026-08-30T20:31:13Z
+completed	success	Add permanent deploy and run script	Deploy to GitHub Pages	main	push	33333664395	30s	2026-08-30T20:26:45Z
+completed	success	Deploy to GitHub Pages	Deploy to GitHub Pages	main	workflow_dispatch	33329710436	26s	2026-08-30T19:01:46Z
+
+watching run 33627394623 (this takes about a minute)...
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33627394623
+Triggered via push about 5 minutes ago
+
+JOBS
+* build (ID 100238271560)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Run actions/setup-node@v4
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v4
+  ✓ Post Run actions/checkout@v4
+  * Complete job
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33627394623
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 18s (ID 100238271560)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Run actions/setup-node@v4
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v4
+  ✓ Post Run actions/checkout@v4
+  ✓ Complete job
+* deploy (ID 100238375584)
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build: .github#2
+
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33627394623
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 18s (ID 100238271560)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Run actions/setup-node@v4
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v4
+  ✓ Post Run actions/checkout@v4
+  ✓ Complete job
+* deploy (ID 100238375584)
+  ✓ Set up job
+  * Deploy to GitHub Pages
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build: .github#2
+
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33627394623
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 18s (ID 100238271560)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Run actions/setup-node@v4
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v4
+  ✓ Post Run actions/checkout@v4
+  ✓ Complete job
+* deploy (ID 100238375584)
+  ✓ Set up job
+  * Deploy to GitHub Pages
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build: .github#2
+
+✓ main Deploy to GitHub Pages · 33627394623
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 18s (ID 100238271560)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Run actions/setup-node@v4
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v4
+  ✓ Post Run actions/checkout@v4
+  ✓ Complete job
+✓ deploy in 9s (ID 100238375584)
+  ✓ Set up job
+  ✓ Deploy to GitHub Pages
+  ✓ Complete job
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+build: .github#2
+
+
+--- job conclusions ---
+{"conclusion":"success","name":"build"}
+{"conclusion":"success","name":"deploy"}
+
+--- failed step logs (if any) ---
+
+=== V2. WHAT THE LIVE SITE SERVES NOW ===
+Giving the CDN a moment to pick up the deployment...
+bytes: 518
+--- asset references ---
+href="/fullstack-dashboard/favicon.svg"
+src="/fullstack-dashboard/assets/index-CUzHnulJ.js"
+href="/fullstack-dashboard/assets/index-CEZk7czg.css"
+
+--- served bundle: https://swipswaps.github.io/fullstack-dashboard/assets/index-CUzHnulJ.js ---
+status: HTTP:200
+bytes : 195592
+
+=== Rule #29 EXACT SYMPTOM CHECK ===
+The original symptom was the served bundle containing "Sample Data"
+and not "Process List". Both are checked by exact string:
+  contains "Sample Data"  : 0   (want 0)
+  contains "Process List" : 1   (want >= 1)
+
+=== END POST-PUSH REPORT ===
