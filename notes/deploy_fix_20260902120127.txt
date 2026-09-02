@@ -1,0 +1,63 @@
+=== deploy_fix.sh - 20260902120127 UTC ===
+project_root: /home/owner/Documents/6a9447c0-d534-83ea-b2c7-9ba48762a252/repo/fullstack-dashboard
+owner_repo:   swipswaps/fullstack-dashboard
+pages_url:    https://swipswaps.github.io/fullstack-dashboard/
+writes: 1   base patched: 1
+
+=== P1. PAGES BUILD TYPE (must be "workflow") ===
+actions/deploy-pages only takes effect when build_type is workflow.
+{"url":"https://api.github.com/repos/swipswaps/fullstack-dashboard/pages","status":"built","cname":null,"custom_404":false,"html_url":"https://swipswaps.github.io/fullstack-dashboard/","build_type":"workflow","source":{"branch":"main","path":"/"},"public":true,"protected_domain_state":null,"pending_domain_unverified_at":null,"https_enforced":true}
+=== P2. WORKFLOW ON DISK ===
+bytes: 945
+SKIP: actionlint not installed (Rule #37 - SKIP, never PASS)
+Install: go install github.com/rhysd/actionlint/cmd/actionlint@latest
+
+--- YAML parses? ---
+YAML OK
+
+=== P3. VITE BASE NOW ===
+      6:   base: mode === 'production' ? '/fullstack-dashboard/' : '/',
+
+=== P4. LOCAL BUILD - does it emit /fullstack-dashboard/ asset paths? ===
+using npm ci (package-lock.json present, 109667 bytes)
+
+added 182 packages, and audited 183 packages in 1m
+
+34 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+> frontend@0.0.0 build
+> vite build
+
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 17 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.51 kB │ gzip:  0.31 kB
+dist/assets/index-CEZk7czg.css    4.04 kB │ gzip:  1.46 kB
+dist/assets/index-CUzHnulJ.js   195.58 kB │ gzip: 61.72 kB
+
+✓ built in 3.17s
+
+--- dist/index.html asset references ---
+href="/fullstack-dashboard/favicon.svg"
+src="/fullstack-dashboard/assets/index-CUzHnulJ.js"
+href="/fullstack-dashboard/assets/index-CEZk7czg.css"
+
+references containing /fullstack-dashboard/ : 3
+forensic marker in bundle    : 1
+
+=== P5. API_BASE (reported, deliberately NOT changed) ===
+      4: const API_BASE = import.meta.env.PROD ? 'http://localhost:3001/api' : '/api';
+     17:       fetch(`${API_BASE}/health`)
+     39:     fetch(`${API_BASE}/processes`)
+     50:     fetch(`${API_BASE}/forensic`)
+     61:     fetch(`${API_BASE}/process/${pid}`)
+If this selects http://localhost:3001 when PROD is true, the published
+HTTPS page cannot fetch it (mixed content) and will show the backend-
+offline banner. That is a product decision, not a deployment bug.
+
+=== END PRE-PUSH REPORT ===
