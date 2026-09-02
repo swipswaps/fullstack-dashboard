@@ -5,12 +5,17 @@ const API_BASE = import.meta.env.PROD ? 'http://localhost:3001/api' : '/api';
 
 // Chromium 142+ Local Network Access. Annotating the request with
 // targetAddressSpace tells the browser the target is loopback BEFORE DNS
+// resolution. The value must be 'loopback', NOT 'local'. Measured on
+// Chromium 151: 'local' yields "target IP address space of `local` yet
+// the resource is in address space `loopback`" and can never succeed;
+// 'loopback' yields "Permission was denied", and once the user grants
+// the local network prompt the request returns HTTP 200.
 // resolution, which is what exempts it from the mixed-content check when an
 // HTTPS page (github.io) calls http://localhost. Browsers that do not know
 // the option ignore it, so this is safe everywhere; on Firefox and Safari the
 // call simply fails and the banner reports the backend as offline, which is
 // the truthful result there.
-const LOCAL_FETCH_INIT = { targetAddressSpace: 'local' };
+const LOCAL_FETCH_INIT = { targetAddressSpace: 'loopback' };
 
 // Distinguishes "backend is not running" from "the browser refused to let this
 // page talk to loopback". Both surface as TypeError from fetch, so the page

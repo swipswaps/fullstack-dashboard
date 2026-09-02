@@ -1,0 +1,163 @@
+#!/usr/bin/env bash
+# ============================================================================
+# rules_gate.sh - enforces the <userPreferences> rules that no off-the-shelf
+# linter covers.
+#
+# MEASURED JUSTIFICATION: ShellCheck 0.9.0 was run against a file seeded with
+# eleven violations of these rules (sed, set -euo, 2>/dev/null, grep -q, echo
+# with metacharacters, hardcoded raw.githubusercontent owner, git add .,
+# read -r, utcnow(), capture_output=True). It named ZERO of them. It did find
+# four genuine issues in the earlier scripts (SC2181 x2, SC2126, SC2086), so
+# it earns its place -- it simply cannot cover project policy.
+#
+# Usage: ./scripts/rules_gate.sh <file.sh> [more.sh ...]
+# Exit 0 clean, 1 on any violation. Findings print file:line.
+#
+# THREE EXEMPTIONS, each deliberate:
+#   1. Comment lines. A rule may be DISCUSSED without being INVOKED.
+#   2. Heredoc bodies. Those are emitted ARTIFACTS, and artifact_gate.sh is
+#      what validates them (it extracts each body and, for .sh targets, runs
+#      this same gate over it). The opener line is still scanned, so a
+#      heredoc cannot smuggle a violation past the gate on the cat line.
+#   3. The per-line pragma  # rules-gate: allow <reason>  for code that must
+#      contain a banned pattern (a detector, a help string). Per-line only,
+#      never file-wide, and greppable:  git grep -n 'rules-gate: allow'
+# ============================================================================
+set -u
+
+VIOLATIONS=0
+
+# Regex helper. Bash case globs cannot express a word boundary, which is why
+# the first version of this gate reported "passed" and "guessed" as sed
+# invocations. grep -E with explicit boundaries is the fix.
+matches() {
+    local text="$1" regex="$2" hits
+    hits=$(printf '%s' "$text" | grep -cE "$regex" || true)
+    [ "${hits:-0}" -ge 1 ]
+}
+
+report() {
+    printf '%s:%s: [%s] %s\n' "$1" "$2" "$3" "$4"
+    VIOLATIONS=$((VIOLATIONS + 1))
+}
+
+# Blank comment lines and heredoc bodies while preserving line numbers.
+# Quote characters are referenced as octal escapes (\047 = single quote,
+# \042 = double quote) so this awk program contains no literal quote that
+# could be mangled when the file is itself embedded in a heredoc.
+code_only() {
+    awk '
+    BEGIN { in_hd = 0; delim = "" }
+    {
+        line = $0
+        s = line
+        sub(/^[[:space:]]+/, "", s)
+        sub(/[[:space:]]+$/, "", s)
+
+        if (in_hd) {
+            if (s == delim) { in_hd = 0; delim = "" }
+            print NR": "
+            next
+        }
+
+        if (match(line, /<<-?[[:space:]]*[\047\042]?[A-Za-z_][A-Za-z0-9_]*[\047\042]?[[:space:]]*$/)) {
+            d = substr(line, RSTART, RLENGTH)
+            sub(/^<<-?[[:space:]]*/, "", d)
+            gsub(/[\047\042]/, "", d)
+            sub(/[[:space:]]+$/, "", d)
+            if (d != "") { in_hd = 1; delim = d }
+            print NR": "line
+            next
+        }
+
+        if (s ~ /^#/ || s == "") { print NR": " } else { print NR": "line }
+    }' "$1"
+}
+
+check_file() {
+    local f="$1" body ln text
+    if [ ! -f "$f" ]; then
+        printf '%s: file not found\n' "$f"
+        VIOLATIONS=$((VIOLATIONS + 1))
+        return
+    fi
+    body=$(code_only "$f")
+
+    while IFS= read -r entry; do
+        ln="${entry%%: *}"
+        text="${entry#*: }"
+        [ -z "$text" ] && continue
+
+        case "$text" in
+            *"rules-gate: allow"*) continue ;;
+        esac
+
+        if matches "$text" '(^|[^[:alnum:]_])sed([^[:alnum:]_]|$)'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-7" "sed invocation (banned for all uses, including sed -n)"  # rules-gate: allow (message)
+        fi
+
+        if matches "$text" '(^|[[:space:];])set[[:space:]]+-[a-z]*e([a-z]*)?([[:space:]]|$)'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-7" "blanket set -e masks the gated failure paths"  # rules-gate: allow (message)
+        fi
+        if matches "$text" '(^|[[:space:];])set[[:space:]]+-o[[:space:]]+errexit'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-7" "set -o errexit masks the gated failure paths"  # rules-gate: allow (message)
+        fi
+
+        if matches "$text" '2>[[:space:]]*/dev/null'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-8" "stderr discarded; capture and log it instead"  # rules-gate: allow (message)
+        fi
+
+        if matches "$text" 'grep[[:space:]]+-[a-z]*q'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-8" "grep -q suppresses output; use grep -c and show the count"  # rules-gate: allow (message)
+        fi
+
+        # Rule #38: the variable need not sit against the quote. Both
+        # echo "value: $VAR" and echo "done!" are unsafe.
+        if matches "$text" 'echo[[:space:]]+"[^"]*[$!`]'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-38" "echo of a string with a shell metacharacter; use printf"  # rules-gate: allow (message)
+        fi
+
+        if matches "$text" 'raw\.githubusercontent\.com/'; then  # rules-gate: allow (detector)
+            if ! matches "$text" 'raw\.githubusercontent\.com/[$]|REMOTE_RAW'; then
+                report "$f" "$ln" "RULE-53" "hardcoded raw.githubusercontent owner/repo"  # rules-gate: allow (message)
+            fi
+        fi
+
+        if matches "$text" 'utcnow\(\)'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-41" "datetime.utcnow() deprecated; use now(datetime.timezone.utc)"  # rules-gate: allow (message)
+        fi
+
+        if matches "$text" 'capture_output[[:space:]]*=[[:space:]]*True'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-32" "capture_output=True buffers; stream with Popen instead"  # rules-gate: allow (message)
+        fi
+
+        if matches "$text" '(^|[[:space:];&|])git[[:space:]]+add[[:space:]]+(\.|-A|--all)([[:space:]]|$)'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-43" "unscoped git add; stage an explicit path list"  # rules-gate: allow (message)
+        fi
+
+        # Rule #51 targets INTERACTIVE reads only. "while IFS= read -r line"
+        # iterates a file or pipe and is both safe and idiomatic; flagging it
+        # was a false positive on this gate's own source. The interactive
+        # signals are the -p prompt flag, or a read that opens the statement.
+        if matches "$text" 'read[[:space:]]+([^|;&]*[[:space:]])?-[a-zA-Z]*p([[:space:]]|$)'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-51" "interactive read -p; Ctrl+C here loses uncommitted evidence"  # rules-gate: allow (message)
+        elif matches "$text" '^[[:space:]]*read([[:space:]]|$)'; then  # rules-gate: allow (detector)
+            report "$f" "$ln" "RULE-51" "bare read blocks on stdin; commit evidence before prompting"  # rules-gate: allow (message)
+        fi
+    done <<< "$body"
+}
+
+if [ "$#" -eq 0 ]; then
+    printf 'usage: %s <file.sh> [more.sh ...]\n' "$0" >&2
+    exit 2
+fi
+
+for target in "$@"; do
+    check_file "$target"
+done
+
+printf '\nrules_gate: %s violation(s) across %s file(s)\n' "$VIOLATIONS" "$#"
+if [ "$VIOLATIONS" -gt 0 ]; then
+    exit 1
+fi
+exit 0
