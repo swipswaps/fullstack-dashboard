@@ -1,0 +1,96 @@
+=== install_enforcement.sh - 20260902131534 UTC ===
+project_root: /home/owner/Documents/6a9447c0-d534-83ea-b2c7-9ba48762a252/repo/fullstack-dashboard
+owner_repo:   swipswaps/fullstack-dashboard
+artifacts needing write this run: 2
+
+=== L1. SHELLCHECK (general shell correctness) ===
+shellcheck: clean at severity=warning
+
+=== L2. RULES GATE (userPreferences policy) ===
+
+rules_gate: 0 violation(s) across 9 file(s)
+rules_gate exit: 0
+
+=== L3. ARTIFACT GATE (files these scripts emit) ===
+
+=== artifacts emitted by scripts/artifact_gate.sh ===
+  (no quoted heredocs found)
+
+=== artifacts emitted by ./backend_routes.sh ===
+  (no quoted heredocs found)
+
+=== artifacts emitted by ./bump_actions_node24.sh ===
+  (no quoted heredocs found)
+
+=== artifacts emitted by ./deploy_fix.sh ===
+
+- $STAGING/deploy.yml  (lines 168-210, 945 bytes)
+  PASS  $STAGING/deploy.yml (YAML parse)
+
+=== artifacts emitted by ./fix_repo_and_detection.sh ===
+
+- $STAGING/artifact_gate.sh  (lines 204-511, 11936 bytes)
+  PASS  $STAGING/artifact_gate.sh (bash -n)
+  PASS  $STAGING/artifact_gate.sh (shellcheck)
+  PASS  $STAGING/artifact_gate.sh (rules_gate)
+
+=== artifacts emitted by ./install_enforcement.sh ===
+
+- $STAGING/rules_gate.sh  (lines 191-355, 7181 bytes)
+  PASS  $STAGING/rules_gate.sh (bash -n)
+  PASS  $STAGING/rules_gate.sh (shellcheck)
+  PASS  $STAGING/rules_gate.sh (rules_gate)
+
+- $STAGING/artifact_gate.sh  (lines 358-591, 8946 bytes)
+  PASS  $STAGING/artifact_gate.sh (bash -n)
+  PASS  $STAGING/artifact_gate.sh (shellcheck)
+  PASS  $STAGING/artifact_gate.sh (rules_gate)
+
+- $STAGING/eslint.config.js  (lines 595-646, 1868 bytes)
+  PASS  $STAGING/eslint.config.js (node --check)
+  PASS  $STAGING/eslint.config.js (oxlint clean of no-undef (npx))
+
+- $STAGING/pre-commit-config.yaml  (lines 650-689, 1059 bytes)
+  PASS  $STAGING/pre-commit-config.yaml (YAML parse)
+
+- $STAGING/gates.bats  (lines 693-777, 2826 bytes)
+  PASS  $STAGING/gates.bats (non-empty (no validator for .bats))
+
+=== artifacts emitted by ./pages_ground_truth.sh ===
+  (no quoted heredocs found)
+
+=== artifacts emitted by ./repair_and_unblock.sh ===
+
+- $STAGING/artifact_gate.sh  (lines 155-426, 10479 bytes)
+  PASS  $STAGING/artifact_gate.sh (bash -n)
+  PASS  $STAGING/artifact_gate.sh (shellcheck)
+  PASS  $STAGING/artifact_gate.sh (rules_gate)
+
+- $STAGING/gates.bats  (lines 430-521, 3159 bytes)
+  PASS  $STAGING/gates.bats (non-empty (no validator for .bats))
+
+=== artifacts emitted by scripts/rules_gate.sh ===
+  (no quoted heredocs found)
+
+artifact_gate: 9 artifact(s) checked, 0 failure(s)
+artifact_gate exit: 0
+
+=== L4. BATS RUNTIME TESTS ===
+1..9
+ok 1 rules_gate flags a banned stream-editor invocation
+ok 2 rules_gate does NOT flag the words passed, guessed, based
+ok 3 rules_gate does NOT flag a rule merely named in a comment
+ok 4 rules_gate flags blanket errexit
+ok 5 rules_gate does NOT flag while-read file iteration
+ok 6 rules_gate DOES flag an interactive prompt read
+not ok 7 artifact_gate flags a heredoc JS artifact with an undefined identifier
+# (in test file tests/gates.bats, line 60)
+#   `[ "$status" -eq 1 ]' failed
+ok 8 artifact_gate flags a malformed heredoc JSON artifact
+ok 9 artifact_gate passes a well-formed heredoc JSON artifact
+bats exit: 1
+
+=== L5. ESLINT CONFIG LOADS? (the exact failure from the last run) ===
+PASS: eslint.config.js loads without ReferenceError
+
+=== END REPORT ===

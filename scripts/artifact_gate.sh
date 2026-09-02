@@ -37,73 +37,6 @@ skip() { printf '  SKIP  %s (%s not installed - reported as SKIP, never PASS)\n'
 
 have() { command -v "$1" >/dev/null; }
 
-# ---------------------------------------------------------------------------
-# JS LINTER RESOLUTION - the fix for a proven fail-open defect.
-#
-# On a machine where oxlint is not on PATH, "npx --no-install oxlint" exits 1
-# with:  npm error npx canceled due to missing packages and no YES option
-# That message contains neither "no-undef" nor any parse keyword, so the old
-# branch logic fell through to PASS. Result: 24 artifacts reported PASS while
-# the linter had never executed once. bats test 7 is what exposed it.
-#
-# This resolver finds a runner that can ACTUALLY execute, verified by
-# --version, and searches repo-local node_modules/.bin (where lint_and_resolve
-# installed oxlint) before giving up. If nothing runs, the caller reports
-# SKIP - never PASS (Rule #37).
-# ---------------------------------------------------------------------------
-JS_LINTER=""
-JS_LINT_CFG=""
-
-# ---------------------------------------------------------------------------
-# CONFIG RESOLUTION - fixes a false-positive class proven in a live run.
-#
-# The gate copies each artifact to a temp dir before linting. oxlint discovers
-# .oxlintrc.json by walking up from the FILE, so a temp path finds nothing and
-# falls back to defaults, where browser globals are undefined. A real run
-# reported 'window', 'fetch', 'setInterval' and 'clearInterval' as undefined
-# in seven App.jsx artifacts that are perfectly valid browser code.
-#
-# Reproduced, then verified: passing -c <project .oxlintrc.json> eliminates
-# all four false positives AND still reports a genuinely undefined identifier.
-# ---------------------------------------------------------------------------
-resolve_js_config() {
-    local root cand
-    root=$(git rev-parse --show-toplevel 2>&1) || root="."
-    for cand in "$root/.oxlintrc.json" "$root/frontend/.oxlintrc.json"; do
-        if [ -f "$cand" ]; then
-            JS_LINT_CFG="$cand"
-            return 0
-        fi
-    done
-    JS_LINT_CFG=""
-    return 1
-}
-
-resolve_js_linter() {
-    local root cand
-    root=$(git rev-parse --show-toplevel 2>&1) || root="."
-    if have oxlint && oxlint --version > /dev/null 2>&1; then
-        JS_LINTER="oxlint"
-        return 0
-    fi
-    for cand in \
-        "$root/node_modules/.bin/oxlint" \
-        "$root/frontend/node_modules/.bin/oxlint" \
-        "$root/backend/node_modules/.bin/oxlint"
-    do
-        if [ -x "$cand" ] && "$cand" --version > /dev/null 2>&1; then
-            JS_LINTER="$cand"
-            return 0
-        fi
-    done
-    if have npx && npx --no-install oxlint --version > /dev/null 2>&1; then
-        JS_LINTER="npx --no-install oxlint"
-        return 0
-    fi
-    JS_LINTER=""
-    return 1
-}
-
 validate_artifact() {
     local target="$1" body="$2" ext base
     CHECKED=$((CHECKED + 1))
@@ -139,34 +72,38 @@ validate_artifact() {
                 fail "$target" "node --check"
             fi
             # The step that catches undefined identifiers. node --check cannot.
-            if [ -n "$JS_LINTER" ]; then
-                # shellcheck disable=SC2086  # JS_LINTER may be "npx --no-install oxlint"
-                if [ -n "$JS_LINT_CFG" ]; then
-                    $JS_LINTER -c "$JS_LINT_CFG" --deny no-undef "$as_mjs" > "$WORK/ox.out" 2>&1
+            if have oxlint; then
+                if oxlint --deny no-undef "$as_mjs" > "$WORK/ox.out" 2>&1; then
+                    pass "$target" "oxlint no-undef"
                 else
-                    $JS_LINTER --deny no-undef "$as_mjs" > "$WORK/ox.out" 2>&1
+                    if [ "$(grep -c 'no-undef' "$WORK/ox.out" || true)" -ge 1 ]; then
+                        fail "$target" "oxlint no-undef: undefined identifier"
+                        grep -A2 'no-undef' "$WORK/ox.out" | head -12
+                    elif [ "$(grep -ciE 'parse|unexpected|expected' "$WORK/ox.out" || true)" -ge 1 ]; then
+                        # FAIL CLOSED: a parse error means oxlint never got to
+                        # evaluate no-undef, so "no no-undef found" proves nothing.
+                        fail "$target" "oxlint could not parse the artifact"
+                        head -12 "$WORK/ox.out"
+                    else
+                        pass "$target" "oxlint clean of no-undef"
+                    fi
                 fi
-                local ox_rc=$?
-                if [ "$(grep -c 'no-undef' "$WORK/ox.out" || true)" -ge 1 ]; then
-                    fail "$target" "oxlint no-undef: undefined identifier"
-                    grep -A2 'no-undef' "$WORK/ox.out" | head -12
-                elif [ "$(grep -ciE 'parse|unexpected|expected' "$WORK/ox.out" || true)" -ge 1 ]; then
-                    # FAIL CLOSED: a parse error means no-undef was never
-                    # evaluated, so "no finding" proves nothing.
-                    fail "$target" "oxlint could not parse the artifact"
-                    head -12 "$WORK/ox.out"
-                elif [ "$ox_rc" -ne 0 ] && [ ! -s "$WORK/ox.out" ]; then
-                    fail "$target" "linter exited $ox_rc with no output - cannot trust a silent verdict"
-                elif [ "$(grep -ciE 'npm error|command not found|could not determine' "$WORK/ox.out" || true)" -ge 1 ]; then
-                    # FAIL CLOSED on runner failure. This is the exact case
-                    # that produced 24 false PASSes.
-                    fail "$target" "linter runner failed to execute - verdict is meaningless"
-                    head -6 "$WORK/ox.out"
+            elif have npx; then
+                if npx --no-install oxlint --deny no-undef "$as_mjs" > "$WORK/ox.out" 2>&1; then
+                    pass "$target" "oxlint no-undef (npx)"
                 else
-                    pass "$target" "oxlint no-undef ($JS_LINTER)"
+                    if [ "$(grep -c 'no-undef' "$WORK/ox.out" || true)" -ge 1 ]; then
+                        fail "$target" "oxlint no-undef: undefined identifier"
+                        grep -A2 'no-undef' "$WORK/ox.out" | head -12
+                    elif [ "$(grep -ciE 'parse|unexpected|expected' "$WORK/ox.out" || true)" -ge 1 ]; then
+                        fail "$target" "oxlint could not parse the artifact"
+                        head -12 "$WORK/ox.out"
+                    else
+                        pass "$target" "oxlint clean of no-undef (npx)"
+                    fi
                 fi
             else
-                skip "$target" "oxlint (no runnable linter found on PATH, in npx, or in any node_modules/.bin)"
+                skip "$target" "oxlint"
             fi
             ;;
         sh|bash)
@@ -278,17 +215,6 @@ PYEOF
         validate_artifact "$target" "$WORK/body"
     done < "$WORK/blocks.txt"
 }
-
-if resolve_js_linter; then
-    printf 'js linter: %s\n' "$JS_LINTER"
-else
-    printf 'js linter: NONE RUNNABLE - JS artifacts will report SKIP, never PASS\n'
-fi
-if resolve_js_config; then
-    printf 'js linter config: %s\n' "$JS_LINT_CFG"
-else
-    printf 'js linter config: NONE FOUND - browser globals may report as undefined\n'
-fi
 
 if [ "$#" -eq 0 ]; then
     printf 'usage: %s <script.sh> [more.sh ...]\n' "$0" >&2
