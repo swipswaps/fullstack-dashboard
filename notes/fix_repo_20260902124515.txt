@@ -131,3 +131,117 @@ artifact_gate: 9 artifact(s) checked, 0 failure(s)
 artifact_gate exit: 0
 
 === END PRE-PUSH REPORT ===
+
+=== G1. WORKFLOW RUN ===
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33634077701
+Triggered via push about 5 minutes ago
+
+JOBS
+* build (ID 100260412510)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  * Upload artifact
+  * Post Run actions/setup-node@v5
+  * Post Run actions/checkout@v5
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33634077701
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 14s (ID 100260412510)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+* deploy (ID 100260505381)
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33634077701
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 14s (ID 100260412510)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+* deploy (ID 100260505381)
+  * Set up job
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33634077701
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 14s (ID 100260412510)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+* deploy (ID 100260505381)
+  ✓ Set up job
+  * Deploy to GitHub Pages
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33634077701
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 14s (ID 100260412510)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+* deploy (ID 100260505381)
+  ✓ Set up job
+  ✓ Deploy to GitHub Pages
+  ✓ Complete job
+✓ main Deploy to GitHub Pages · 33634077701
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 14s (ID 100260412510)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+✓ deploy in 9s (ID 100260505381)
+  ✓ Set up job
+  ✓ Deploy to GitHub Pages
+  ✓ Complete job
+{"conclusion":"success","name":"build"}
+{"conclusion":"success","name":"deploy"}
+
+=== G2. LIVE BUNDLE - Rule #29 EXACT CHECKS ===
+bundle: https://swipswaps.github.io/fullstack-dashboard/assets/index-CF398QfR.js
+status: HTTP:200
+  "Sample Data"        : 0   (want 0)
+  "Process List"       : 1   (want >= 1)
+  "targetAddressSpace" : 1   (want >= 1 - detection shipped)
+
+=== END POST-PUSH REPORT ===
