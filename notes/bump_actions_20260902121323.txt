@@ -19,3 +19,126 @@ lock path     : 1  (want 1)
 node-version  : 1  (want 1)
 
 === END PRE-PUSH REPORT ===
+
+=== V1. RUN TRIGGERED BY THIS PUSH ===
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33628328430
+Triggered via push about 5 minutes ago
+
+JOBS
+* build (ID 100241308444)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33628328430
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 13s (ID 100241308444)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+* deploy (ID 100241382727)
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33628328430
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 13s (ID 100241308444)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+* deploy (ID 100241382727)
+  ✓ Set up job
+  * Deploy to GitHub Pages
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33628328430
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 13s (ID 100241308444)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+* deploy (ID 100241382727)
+  ✓ Set up job
+  * Deploy to GitHub Pages
+Refreshing run status every 3 seconds. Press Ctrl+C to quit.
+
+* main Deploy to GitHub Pages · 33628328430
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 13s (ID 100241308444)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+✓ deploy in 11s (ID 100241382727)
+  ✓ Set up job
+  ✓ Deploy to GitHub Pages
+  ✓ Complete job
+✓ main Deploy to GitHub Pages · 33628328430
+Triggered via push about 5 minutes ago
+
+JOBS
+✓ build in 13s (ID 100241308444)
+  ✓ Set up job
+  ✓ Run actions/checkout@v5
+  ✓ Run actions/setup-node@v5
+  ✓ Install and Build
+  ✓ Upload artifact
+  ✓ Post Run actions/setup-node@v5
+  ✓ Post Run actions/checkout@v5
+  ✓ Complete job
+✓ deploy in 11s (ID 100241382727)
+  ✓ Set up job
+  ✓ Deploy to GitHub Pages
+  ✓ Complete job
+
+--- job conclusions ---
+{"conclusion":"success","name":"build"}
+{"conclusion":"success","name":"deploy"}
+
+=== Rule #29 EXACT CHECK: is the Node 20 annotation GONE? ===
+annotations returned:
+(none)
+
+mentions "Node.js 20" : 0   (want 0)
+
+=== V2. SITE STILL SERVES THE FORENSIC BUNDLE ===
+bundle: https://swipswaps.github.io/fullstack-dashboard/assets/index-CUzHnulJ.js
+status: HTTP:200
+  contains "Sample Data"  : 0   (want 0)
+  contains "Process List" : 1   (want >= 1)
+
+=== END POST-PUSH REPORT ===
