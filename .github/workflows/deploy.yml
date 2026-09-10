@@ -1,34 +1,52 @@
+# ============================================================================
+# GitHub Pages deployment - native artifact-based pattern.
+# Actions: configure-pages@v5, upload-pages-artifact@v3, deploy-pages@v4.
+# Node.js 24 via setup-node@v5 (Node 20 removed from runners 2026-09-16).
+# ============================================================================
 name: Deploy to GitHub Pages
+
 on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 concurrency:
   group: "pages"
   cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 24
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Install and Build
         run: |
           cd frontend
           npm ci
           npm run build
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./frontend/dist
+
   deploy:
     environment:
       name: github-pages
@@ -38,4 +56,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4

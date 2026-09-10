@@ -1,0 +1,38 @@
+# Hook revisions are PINNED. Floating to a new shellcheck or actionlint
+# release would change what passes CI without any commit of ours.
+repos:
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.11.0
+    hooks:
+      - id: shellcheck
+        args: ["--severity=warning"]
+
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.7
+    hooks:
+      - id: actionlint
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-json
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  # Layers 2 and 3 are local: they encode this project's own rules and have
+  # no upstream equivalent.
+  - repo: local
+    hooks:
+      - id: rules-gate
+        name: userPreferences rules gate
+        entry: scripts/rules_gate.sh
+        language: script
+        files: \.(sh|bash)$
+
+      - id: artifact-gate
+        name: generated-artifact gate
+        entry: scripts/artifact_gate.sh
+        language: script
+        files: \.(sh|bash)$

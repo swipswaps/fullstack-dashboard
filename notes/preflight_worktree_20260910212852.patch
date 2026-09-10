@@ -1,0 +1,600 @@
+diff --git a/node_modules/.package-lock.json b/node_modules/.package-lock.json
+index 1ef1a26..f31517c 100644
+--- a/node_modules/.package-lock.json
++++ b/node_modules/.package-lock.json
+@@ -1,5 +1,5 @@
+ {
+-  "name": "fullstack-dashboard",
++  "name": "forensic-dashboard",
+   "version": "1.0.0",
+   "lockfileVersion": 3,
+   "requires": true,
+@@ -204,6 +204,38 @@
+       "dev": true,
+       "license": "MIT"
+     },
++    "node_modules/playwright": {
++      "version": "1.62.1",
++      "resolved": "https://registry.npmjs.org/playwright/-/playwright-1.62.1.tgz",
++      "integrity": "sha512-0M+L3LAD8/nm554LOla9Ayx0j0tmFZ0FBcoQ7F1VuVHpM/XpiC8RcDzBQB8W5+hA8L22THxELzeF+2WcUzvcLg==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "dependencies": {
++        "playwright-core": "1.62.1"
++      },
++      "bin": {
++        "playwright": "cli.js"
++      },
++      "engines": {
++        "node": ">=20"
++      },
++      "optionalDependencies": {
++        "fsevents": "2.3.2"
++      }
++    },
++    "node_modules/playwright-core": {
++      "version": "1.62.1",
++      "resolved": "https://registry.npmjs.org/playwright-core/-/playwright-core-1.62.1.tgz",
++      "integrity": "sha512-wPYSwEBJY9GHraISXqyqtx0na0LpO3XEX7jNDhntbex7tzUS7kLnZsOlFruFJB4Hi/rhDMjXGqHewDZ68nYZVw==",
++      "dev": true,
++      "license": "Apache-2.0",
++      "bin": {
++        "playwright-core": "cli.js"
++      },
++      "engines": {
++        "node": ">=20"
++      }
++    },
+     "node_modules/require-directory": {
+       "version": "2.1.1",
+       "resolved": "https://registry.npmjs.org/require-directory/-/require-directory-2.1.1.tgz",
+@@ -225,9 +257,9 @@
+       }
+     },
+     "node_modules/shell-quote": {
+-      "version": "1.10.0",
+-      "resolved": "https://registry.npmjs.org/shell-quote/-/shell-quote-1.10.0.tgz",
+-      "integrity": "sha512-w1aiOKwKuRgtwAReIIj89puqg+I7GvX4IbLrvmhXbzQsj1+Zwi4VO3+fa6ZF91TWSjIxoEkKnMeHcLEODK5ZXA==",
++      "version": "1.9.0",
++      "resolved": "https://registry.npmjs.org/shell-quote/-/shell-quote-1.9.0.tgz",
++      "integrity": "sha512-Iov+JwFv/2HcTpcwNMKd8+IWNb8tboQJNQTkAY/LLVK7gGH9jy+LGkVqPxfekHl+yMmiqXszdGWXgkfml7hjqA==",
+       "dev": true,
+       "license": "MIT",
+       "engines": {
+diff --git a/node_modules/shell-quote/README.md b/node_modules/shell-quote/README.md
+index cec8c2a..f8db0c8 100644
+--- a/node_modules/shell-quote/README.md
++++ b/node_modules/shell-quote/README.md
+@@ -13,7 +13,7 @@ Parse and quote shell commands.
+ 
+ ## quote
+ 
+-```js
++``` js
+ var quote = require('shell-quote/quote');
+ var s = quote([ 'a', 'b c d', '$f', '"g"' ]);
+ console.log(s);
+@@ -27,21 +27,21 @@ a 'b c d' \$f '"g"'
+ 
+ ## parse
+ 
+-```js
++``` js
+ var parse = require('shell-quote/parse');
+-var xs = parse('a "b c" \\$def \'it\'\\\'\'s great\'');
++var xs = parse('a "b c" \\$def \'it\\\'s great\'');
+ console.dir(xs);
+ ```
+ 
+ output
+ 
+ ```
+-[ 'a', 'b c', '$def', "it's great" ]
++[ 'a', 'b c', '\\$def', 'it\'s great' ]
+ ```
+ 
+ ## parse with an environment variable
+ 
+-```js
++``` js
+ var parse = require('shell-quote/parse');
+ var xs = parse('beep --boop="$PWD"', { PWD: '/home/robot' });
+ console.dir(xs);
+@@ -55,7 +55,7 @@ output
+ 
+ ## parse with custom escape character
+ 
+-```js
++``` js
+ var parse = require('shell-quote/parse');
+ var xs = parse('beep ^--boop="$PWD"', { PWD: '/home/robot' }, { escape: '^' });
+ console.dir(xs);
+@@ -64,26 +64,12 @@ console.dir(xs);
+ output
+ 
+ ```
+-[ 'beep', '--boop=/home/robot' ]
+-```
+-
+-## parse with unquoted variable splitting
+-
+-```js
+-var parse = require('shell-quote/parse');
+-var xs = parse('a $T', { T: 'c d' }, { splitUnquoted: true });
+-console.dir(xs);
+-```
+-
+-output
+-
+-```
+-[ 'a', 'c', 'd' ]
++[ 'beep --boop=/home/robot' ]
+ ```
+ 
+ ## parsing shell operators
+ 
+-```js
++``` js
+ var parse = require('shell-quote/parse');
+ var xs = parse('beep || boop > /byte');
+ console.dir(xs);
+@@ -97,7 +83,7 @@ output:
+ 
+ ## parsing shell comment
+ 
+-```js
++``` js
+ var parse = require('shell-quote/parse');
+ var xs = parse('beep > boop # > kaboom');
+ console.dir(xs);
+@@ -106,12 +92,12 @@ console.dir(xs);
+ output:
+ 
+ ```
+-[ 'beep', { op: '>' }, 'boop', { comment: ' > kaboom' } ]
++[ 'beep', { op: '>' }, 'boop', { comment: '> kaboom' } ]
+ ```
+ 
+ # methods
+ 
+-```js
++``` js
+ var quote = require('shell-quote/quote');
+ var parse = require('shell-quote/parse');
+ ```
+@@ -128,22 +114,6 @@ Each entry of `args` may be a string, or one of the object shapes that
+ other object shape, an unrecognized `op`, or a `pattern`/`comment`
+ containing line terminators throws a `TypeError`.
+ 
+-The output is POSIX shell (`sh`/`bash`) quoting.
+-It is not valid for Windows `cmd.exe` or PowerShell,
+-whose rules differ and, for `cmd.exe`,
+-are not solvable in the general case. On Windows,
+-do not build a shell command string from this output;
+-instead pass an argument array to a non-shell API such as
+-`child_process.execFile` or `spawn`
+-(or the `cross-spawn` package),
+-which does no shell parsing and needs no quoting.
+-
+-Use the returned string verbatim as shell input.
+-It is already a complete, escaped shell word (or words);
+-do not wrap it in additional quotes or embed it in `eval '...'`.
+-Re-quoting the output (for example, placing it inside single quotes)
+-turns its backslash escapes into literal characters and corrupts the value.
+-
+ ## parse(cmd, env={})
+ 
+ Return an array of arguments from the quoted string `cmd`.
+@@ -151,30 +121,13 @@ Return an array of arguments from the quoted string `cmd`.
+ Interpolate embedded bash-style `$VARNAME` and `${VARNAME}` variables with
+ the `env` object which like bash will replace undefined variables with `""`.
+ 
+-By default an expanded variable is a single token even when unquoted.
+-Pass `{ splitUnquoted: true }` to split an unquoted expansion into multiple tokens the way a shell performs field splitting,
+-using the default `IFS` (space, tab, newline).
+-Pass a string to use its characters as the `IFS` instead
+-(for example `{ splitUnquoted: ':' }`).
+-A quoted expansion (`"$VAR"`) is never split.
+-
+-Only simple `$VARNAME` and `${VARNAME}` interpolation is supported.
+-Bash parameter expansion beyond a plain variable name is not evaluated:
+-forms such as array subscripts (`${arr[i]}`), length (`${#arr[@]}`),
+-and modifiers (`${var:-default}`, `${var/a/b}`)
+-are treated as an unknown variable and expand to `""`,
+-while arithmetic (`$((...))`) and command substitution (`$(...)`)
+-are not interpreted.
+-Whitespace inside `${...}` throws a `Bad substitution` error.
+-
+ `env` is usually an object but it can also be a function to perform lookups.
+-When `env(key)` returns a string, its result will be output just like `env[key]` would.
+-When `env(key)` returns an object, it will be inserted into the result
++When `env(key)` returns a string, its result will be output just like `env[key]`
++would. When `env(key)` returns an object, it will be inserted into the result
+ array like the operator objects.
+ 
+-When a bash operator is encountered,
+-the element in the array with be an object with an `"op"` key set to the operator string.
+-For example:
++When a bash operator is encountered, the element in the array with be an object
++with an `"op"` key set to the operator string. For example:
+ 
+ ```
+ 'beep || boop > /byte'
+@@ -202,6 +155,8 @@ MIT
+ [npm-version-svg]: https://versionbadg.es/ljharb/shell-quote.svg
+ [deps-svg]: https://david-dm.org/ljharb/shell-quote.svg
+ [deps-url]: https://david-dm.org/ljharb/shell-quote
++[dev-deps-svg]: https://david-dm.org/ljharb/shell-quote/dev-status.svg
++[dev-deps-url]: https://david-dm.org/ljharb/shell-quote#info=devDependencies
+ [npm-badge-png]: https://nodei.co/npm/shell-quote.png?downloads=true&stars=true
+ [license-image]: https://img.shields.io/npm/l/shell-quote.svg
+ [license-url]: LICENSE
+diff --git a/node_modules/shell-quote/package.json b/node_modules/shell-quote/package.json
+index 45147ef..20f80d7 100644
+--- a/node_modules/shell-quote/package.json
++++ b/node_modules/shell-quote/package.json
+@@ -1,7 +1,7 @@
+ {
+ 	"name": "shell-quote",
+ 	"description": "quote and parse shell commands",
+-	"version": "1.10.0",
++	"version": "1.9.0",
+ 	"author": {
+ 		"name": "James Halliday",
+ 		"email": "mail@substack.net",
+@@ -40,12 +40,12 @@
+ 		"postversion": "auto-changelog && git add CHANGELOG.md && git commit --no-edit --amend && git tag -f \"v$(node -e \"console.log(require('./package.json').version)\")\""
+ 	},
+ 	"devDependencies": {
+-		"@arethetypeswrong/cli": "^0.18.5",
++		"@arethetypeswrong/cli": "^0.18.2",
+ 		"@ljharb/eslint-config": "^22.2.3",
+ 		"@ljharb/tsconfig": "^0.3.2",
+ 		"auto-changelog": "^2.6.0",
+-		"eslint": "^10.6.0",
+-		"evalmd": "^0.0.20",
++		"eslint": "^10.5.0",
++		"evalmd": "^0.0.19",
+ 		"in-publish": "^2.0.1",
+ 		"jiti": "^0.0.0",
+ 		"npmignore": "^0.3.5",
+diff --git a/node_modules/shell-quote/parse.d.ts b/node_modules/shell-quote/parse.d.ts
+index 4d9257f..7f84b4a 100644
+--- a/node_modules/shell-quote/parse.d.ts
++++ b/node_modules/shell-quote/parse.d.ts
+@@ -22,8 +22,6 @@ declare namespace parse {
+ 	export interface ParseOptions {
+ 		/** Custom escape character. Defaults to `\\`. */
+ 		escape?: string;
+-		/** Field-splits an unquoted variable expansion, the way a shell does using `IFS`; quoted expansions are never split. `true` uses the default IFS (space, tab, newline); a string uses its characters as the IFS. An empty string, `false`, or omitting the option disables splitting. Defaults to false. */
+-		splitUnquoted?: boolean | string;
+ 	}
+ 
+ 	export type Env =
+diff --git a/node_modules/shell-quote/parse.js b/node_modules/shell-quote/parse.js
+index 4b13e1a..4a28fbe 100644
+--- a/node_modules/shell-quote/parse.js
++++ b/node_modules/shell-quote/parse.js
+@@ -24,8 +24,8 @@ var CONTROL = /** @type {const} */ ('(?:') + /** @type {const} */ ([
+ ]).join(/** @type {const} */ ('|')) + /** @type {const} */ (')');
+ var controlRE = new RegExp('^' + CONTROL + '$');
+ var META = /** @type {const} */ ('|&;()<> \\t');
+-var SINGLE_QUOTE = /** @type {const} */ ('\'([^\']*?)\'');
+-var DOUBLE_QUOTE = /** @type {const} */ ('"((\\\\"|[^"])*?)"');
++var SINGLE_QUOTE = /** @type {const} */ ('"((\\\\"|[^"])*?)"');
++var DOUBLE_QUOTE = /** @type {const} */ ('\'((\\\\\'|[^\'])*?)\'');
+ var hash = /^#$/;
+ 
+ var SQ = /** @type {const} */ ("'");
+@@ -83,7 +83,7 @@ function getVar(env, pre, key) {
+ /**
+  * @param {string} string
+  * @param {Env} [env]
+- * @param {{ escape?: string, splitUnquoted?: boolean | string }} [opts]
++ * @param {{ escape?: string }} [opts]
+  * @returns {ParseEntry[]}
+  */
+ function parseInternal(string, env, opts) {
+@@ -91,12 +91,11 @@ function parseInternal(string, env, opts) {
+ 		opts = {};
+ 	}
+ 	var BS = opts.escape || '\\';
+-	var ifs = opts.splitUnquoted === true ? ' \t\n' : (typeof opts.splitUnquoted === 'string' ? opts.splitUnquoted : '');
+ 	var BAREWORD = '(\\' + BS + '[\'"' + META + ']|[^\\s\'"' + META + '])+';
+ 
+ 	var chunker = new RegExp([
+ 		'(' + CONTROL + ')', // control chars
+-		'(' + BAREWORD + '|' + DOUBLE_QUOTE + '|' + SINGLE_QUOTE + ')+'
++		'(' + BAREWORD + '|' + SINGLE_QUOTE + '|' + DOUBLE_QUOTE + ')+'
+ 	].join('|'), 'g');
+ 
+ 	var matches = matchAll(string, chunker);
+@@ -134,11 +133,6 @@ function parseInternal(string, env, opts) {
+ 		var quote = false;
+ 		var esc = false;
+ 		var out = '';
+-		/** @type {string[]} */
+-		var words = [];
+-		var sawQuote = false;
+-		/** @type {number | null} */
+-		var pendingNw = null;
+ 		var isGlob = false;
+ 		/** @type {number} */
+ 		var i;
+@@ -156,21 +150,10 @@ function parseInternal(string, env, opts) {
+ 				if (s.charAt(i) === '}') {
+ 					throw new Error('Bad substitution: ' + s.slice(i - 2, i + 1));
+ 				}
+-				// match braces by depth so a nested `${` keeps its inner `}` from ending the outer substitution
+-				var depth = 1;
+-				varend = i;
+-				while (depth > 0 && varend < s.length) {
+-					if (s.charAt(varend) === '{' && s.charAt(varend - 1) === '$') {
+-						depth += 1;
+-					} else if (s.charAt(varend) === '}') {
+-						depth -= 1;
+-					}
+-					varend += 1;
+-				}
+-				if (depth !== 0) {
++				varend = s.indexOf('}', i);
++				if (varend < 0) {
+ 					throw new Error('Bad substitution: ' + s.slice(i));
+ 				}
+-				varend -= 1;
+ 				varname = s.slice(i, varend);
+ 				i = varend;
+ 			} else if ((/[*@#?$!_-]/).test(char)) {
+@@ -190,30 +173,8 @@ function parseInternal(string, env, opts) {
+ 			return getVar(/** @type {NonNullable<typeof env>} */ (env), '', varname);
+ 		}
+ 
+-		function flushRun() {
+-			if (pendingNw === null) {
+-				return;
+-			}
+-			if (pendingNw === 0) {
+-				if (out !== '') {
+-					words[words.length] = out;
+-					out = '';
+-				}
+-			} else {
+-				words[words.length] = out;
+-				out = '';
+-				for (var fe = 1; fe < pendingNw; fe += 1) {
+-					words[words.length] = '';
+-				}
+-			}
+-			pendingNw = null;
+-		}
+-
+ 		for (i = 0; i < s.length; i++) {
+ 			var c = s.charAt(i);
+-			if (ifs && c !== DS) {
+-				flushRun();
+-			}
+ 			isGlob = isGlob || (!quote && (c === '*' || c === '?'));
+ 			if (esc) {
+ 				out += c;
+@@ -240,7 +201,6 @@ function parseInternal(string, env, opts) {
+ 				}
+ 			} else if (c === DQ || c === SQ) {
+ 				quote = c;
+-				sawQuote = true;
+ 			} else if (controlRE.test(c)) {
+ 				return /** @type {ControlOperator} */ ({ op: s });
+ 			} else if (hash.test(c)) {
+@@ -253,22 +213,7 @@ function parseInternal(string, env, opts) {
+ 			} else if (c === BS) {
+ 				esc = true;
+ 			} else if (c === DS) {
+-				var value = parseEnvVar();
+-				if (!ifs) {
+-					out += value;
+-				} else {
+-					for (var vi = 0; vi < value.length; vi += 1) {
+-						var vc = value.charAt(vi);
+-						if (ifs.indexOf(vc) < 0) {
+-							flushRun();
+-							out += vc;
+-						} else if (pendingNw === null) {
+-							pendingNw = vc === ' ' || vc === '\t' || vc === '\n' ? 0 : 1;
+-						} else if (vc !== ' ' && vc !== '\t' && vc !== '\n') {
+-							pendingNw += 1;
+-						}
+-					}
+-				}
++				out += parseEnvVar();
+ 			} else {
+ 				out += c;
+ 			}
+@@ -278,20 +223,6 @@ function parseInternal(string, env, opts) {
+ 			return /** @type {GlobPattern} */ ({ op: 'glob', pattern: out });
+ 		}
+ 
+-		if (ifs) {
+-			if (pendingNw !== null && pendingNw > 0) {
+-				words[words.length] = out;
+-				out = '';
+-				for (var te = 1; te < pendingNw; te += 1) {
+-					words[words.length] = '';
+-				}
+-			}
+-			if (out !== '' || (sawQuote && words.length === 0)) {
+-				words[words.length] = out;
+-			}
+-			return words;
+-		}
+-
+ 		return out;
+ 	}).reduce(function (prev, arg) { // finalize parsed arguments
+ 		if (typeof arg === 'undefined') {
+@@ -304,7 +235,7 @@ function parseInternal(string, env, opts) {
+ 	}, /** @type {ParseEntry[]} */ ([]));
+ }
+ 
+-/** @type {typeof import('./parse')} */
++/** @type {import('./parse')} */
+ module.exports = function parse(s, env, opts) {
+ 	var mapped = parseInternal(s, env, opts);
+ 	if (typeof env !== 'function') {
+diff --git a/node_modules/shell-quote/quote.js b/node_modules/shell-quote/quote.js
+index 2c7f9b8..a89720e 100644
+--- a/node_modules/shell-quote/quote.js
++++ b/node_modules/shell-quote/quote.js
+@@ -24,7 +24,7 @@ var OPS = /** @type {const} */ ([
+ var LINE_TERMINATORS = /[\n\r\u2028\u2029]/;
+ var GLOB_SHELL_SPECIAL = /[\s#!"$&'():;<=>@\\^`|]/g;
+ 
+-/** @type {typeof import('./quote')} */
++/** @type {import('./quote')} */
+ module.exports = function quote(xs) {
+ 	return xs.map(function (s) {
+ 		if (s === '') {
+diff --git a/node_modules/shell-quote/test/parse.js b/node_modules/shell-quote/test/parse.js
+index cb04ff0..e3e4d30 100644
+--- a/node_modules/shell-quote/test/parse.js
++++ b/node_modules/shell-quote/test/parse.js
+@@ -2,7 +2,6 @@
+ 
+ var test = require('tape');
+ var parse = require('../').parse;
+-var quote = require('../').quote;
+ 
+ test('parse shell commands', function (t) {
+ 	t.same(parse(''), [], 'parses an empty string');
+@@ -33,12 +32,6 @@ test('parse shell commands', function (t) {
+ 	t.same(parse('a\\ b"c d"\\ e f'), ['a bc d e', 'f']);
+ 	t.same(parse('a\\ b"c d"\\ e\'f g\' h'), ['a bc d ef g', 'h']);
+ 	t.same(parse("x \"bl'a\"'h'"), ['x', "bl'ah"]);
+-
+-	// inside single quotes everything is literal, so a backslash does not escape
+-	// the closing quote and a quoted token must end at its first closing quote
+-	t.same(parse("'\\' '\\'"), ['\\', '\\'], 'single-quoted backslashes parse as two separate tokens');
+-	t.same(parse("'\\'\\''"), ["\\'"], 'single-quoted backslash joined with an escaped quote');
+-	t.same(parse(quote(['\\', '\\'])), ['\\', '\\'], 'quote/parse round-trips a pair of backslashes');
+ 	t.same(parse("x bl^'a^'h'", {}, { escape: '^' }), ['x', "bl'a'h"]);
+ 	t.same(parse('abcH def', {}, { escape: 'H' }), ['abc def']);
+ 
+@@ -56,81 +49,6 @@ test('parse shell commands', function (t) {
+ 	t.end();
+ });
+ 
+-test('single quotes are literal', function (t) {
+-	t.same(parse("'\\'\\'"), ["\\'"], 'close-escape-reopen produces a quote after a quoted backslash');
+-	t.same(parse("'a'\\''b'"), ["a'b"], 'close-escape-reopen embeds a quote mid-word');
+-	t.same(parse("'\\'x"), ['\\x'], 'bareword joins a preceding quoted backslash');
+-	t.same(parse("a'\\'b"), ['a\\b'], 'quoted backslash joins surrounding barewords');
+-	t.same(parse("''"), [''], 'empty single quotes produce an empty token');
+-	t.same(parse("''a''"), ['a'], 'empty single quotes join adjacent content');
+-	t.same(parse("'*'"), ['*'], 'quoted glob char is a plain string, not a glob');
+-
+-	t.end();
+-});
+-
+-test('unmatched single quotes', function (t) {
+-	// real shells reject unterminated quotes; parse is lenient, and these pin the shape of that leniency
+-	t.same(parse("'"), [], 'a lone quote is dropped');
+-	t.same(parse("'a"), ['a'], 'an unterminated quote keeps its content');
+-	t.same(parse("a'b"), ['a', 'b'], 'an unmatched quote mid-word splits the token');
+-
+-	t.end();
+-});
+-
+-test('nested parameter expansion', function (t) {
+-	t.same(parse('${a${b}c}'), [''], 'a nested ${} is consumed as one substitution, not split at the first }');
+-	t.same(parse('${a${b}}'), [''], 'a nested ${} at the end is consumed as one substitution');
+-	t.same(parse('${foo{bar}'), [''], 'a lone { that is not part of a nested ${} does not change brace depth');
+-	t.same(
+-		parse('level=${levels[$RANDOM%${#levels[@]}]}'),
+-		['level='],
+-		'a nested array-index expansion is consumed whole, without leaking a partial token'
+-	);
+-
+-	t.end();
+-});
+-
+-test('splitUnquoted: field-splits unquoted variable expansion (#1)', function (t) {
+-	var env = { T: 'c d', E: '', S: '  c   d  ', W: '   ' };
+-	var opts = { splitUnquoted: true };
+-
+-	t.same(parse('test a b $T', env, opts), ['test', 'a', 'b', 'c', 'd'], 'unquoted expansion splits into separate tokens');
+-	t.same(parse('a$T', env, opts), ['ac', 'd'], 'the first field joins the preceding text');
+-	t.same(parse('$T x', env, opts), ['c', 'd', 'x'], 'the last field is a token of its own');
+-	t.same(parse('x${T}y', env, opts), ['xc', 'dy'], 'fields join text on both sides');
+-	t.same(parse('$S', env, opts), ['c', 'd'], 'leading, trailing, and repeated whitespace collapses');
+-	t.same(parse('a$S', env, opts), ['a', 'c', 'd'], 'leading whitespace closes the preceding field');
+-	t.same(parse('$W', env, opts), [], 'an all-whitespace expansion produces no tokens');
+-	t.same(parse('a$W b', env, opts), ['a', 'b'], 'an all-whitespace expansion just separates fields');
+-	t.same(parse('$E', env, opts), [], 'an empty unquoted expansion produces no token');
+-	t.same(parse('"$T"', env, opts), ['c d'], 'a quoted expansion is never split');
+-	t.same(parse('-x "" -y', env, opts), ['-x', '', '-y'], 'a quoted empty string is still preserved');
+-	t.same(parse('a $F b', function () { return 'c d'; }, opts), ['a', 'c', 'd', 'b'], 'the env-function path splits too');
+-
+-	t.same(parse('test a b $T', env), ['test', 'a', 'b', 'c d'], 'without the option, unquoted expansion is not split');
+-
+-	t.end();
+-});
+-
+-test('splitUnquoted: a string value is a custom IFS (#1)', function (t) {
+-	function o(ifs) { return { splitUnquoted: ifs }; }
+-
+-	t.same(parse('${V}', { V: 'a:b' }, o(':')), ['a', 'b'], 'a non-whitespace IFS char splits fields');
+-	t.same(parse('${V}', { V: 'a::b' }, o(':')), ['a', '', 'b'], 'adjacent non-whitespace delimiters yield an empty field');
+-	t.same(parse('${V}', { V: ':a:' }, o(':')), ['', 'a'], 'a leading delimiter yields a leading empty; a trailing one does not');
+-	t.same(parse('${V}', { V: 'a::' }, o(':')), ['a', ''], 'a trailing double delimiter yields one empty field');
+-	t.same(parse('${V}', { V: ':' }, o(':')), [''], 'a lone delimiter yields a single empty field');
+-	t.same(parse('${V}', { V: '::' }, o(':')), ['', ''], 'two delimiters yield two empty fields');
+-	t.same(parse('${V}${W}', { V: 'a:', W: ':b' }, o(':')), ['a', '', 'b'], 'delimiters spanning an expansion boundary merge into one run');
+-	t.same(parse('a${V}${W}z', { V: ':x:', W: ':y:' }, o(':')), ['a', 'x', '', 'y', 'z'], 'fields join literal text on both sides across expansions');
+-	t.same(parse('${V}', { V: 'a : b' }, o(' :')), ['a', 'b'], 'whitespace around a non-whitespace delimiter is absorbed');
+-	t.same(parse('${V}', { V: 'a b:c' }, o(' :')), ['a', 'b', 'c'], 'mixed IFS: whitespace and non-whitespace each delimit');
+-	t.same(parse('${V}', { V: 'a,b' }, o(',')), ['a', 'b'], 'any character can be the IFS');
+-	t.same(parse('${V}', { V: 'a b' }, o('')), ['a b'], 'an empty IFS string disables splitting');
+-
+-	t.end();
+-});
+-
+ test('parse stays linear in token count (GHSA-395f-4hp3-45gv)', function (t) {
+ 	// the old concat-in-reduce finalizer was O(n^2): this many tokens took
+ 	// ~minutes, so under the unfixed code this test hangs rather than passes
+diff --git a/node_modules/shell-quote/test/quote.js b/node_modules/shell-quote/test/quote.js
+index c8658e2..36f1cf8 100644
+--- a/node_modules/shell-quote/test/quote.js
++++ b/node_modules/shell-quote/test/quote.js
+@@ -30,7 +30,7 @@ test('quote', function (t) {
+ 	t.end();
+ });
+ 
+-test('quote tilde (escapes every ~ to prevent shell tilde-expansion)', function (t) {
++test('quote tilde (escapes leading ~ to prevent shell tilde-expansion)', function (t) {
+ 	t.equal(quote(['~']), '\\~');
+ 	t.equal(quote(['~/foo']), '\\~/foo');
+ 	t.equal(quote(['~root']), '\\~root');
+@@ -42,23 +42,6 @@ test('quote tilde (escapes every ~ to prevent shell tilde-expansion)', function
+ 	t.end();
+ });
+ 
+-test('backslash with whitespace is not doubled in single quotes (#14)', function (t) {
+-	t.equal(quote(['foo \\ bar']), "'foo \\ bar'", 'a backslash between spaces stays a single literal backslash');
+-	t.equal(quote(['foo \\\\ bar']), "'foo \\\\ bar'", 'a double backslash is preserved, not quadrupled');
+-	t.equal(quote(['foo\\\nbar']), "'foo\\\nbar'", 'a backslash before a newline is preserved');
+-	t.end();
+-});
+-
+-test('escapes shell-special characters conservatively (issue #11)', function (t) {
+-	t.equal(quote(['make', 'CFLAGS=-DRELEASE']), 'make CFLAGS\\=-DRELEASE', 'escapes = so a leading word is not read as an assignment');
+-	t.equal(quote(['a@b']), 'a\\@b', 'escapes @ (zsh globbing)');
+-	t.equal(quote(['a^b']), 'a\\^b', 'escapes ^ (zsh extendedglob, csh)');
+-	t.equal(quote(['a:b']), 'a\\:b', 'escapes :');
+-	t.equal(quote(['a,b']), 'a\\,b', 'escapes , (brace expansion)');
+-	t.equal(quote(['a!b']), 'a\\!b', 'escapes ! (history expansion / pipeline negation)');
+-	t.end();
+-});
+-
+ test('quote ops', function (t) {
+ 	t.equal(quote(['a', { op: '|' }, 'b']), 'a \\| b');
+ 	t.equal(
+diff --git a/notes/rule_compliance.db b/notes/rule_compliance.db
+index 48b27e9..9289178 100644
+Binary files a/notes/rule_compliance.db and b/notes/rule_compliance.db differ
