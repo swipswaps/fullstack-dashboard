@@ -1,0 +1,119 @@
+=== staging_evidence.sh - 20260910211715 UTC ===
+project_root: /home/owner/Documents/6a9447c0-d534-83ea-b2c7-9ba48762a252/repo/fullstack-dashboard
+owner_repo:   swipswaps/fullstack-dashboard
+
+=== GIT STATUS ===
+ M node_modules/.package-lock.json
+ M node_modules/shell-quote/README.md
+ M node_modules/shell-quote/package.json
+ M node_modules/shell-quote/parse.d.ts
+ M node_modules/shell-quote/parse.js
+ M node_modules/shell-quote/quote.js
+ M node_modules/shell-quote/test/parse.js
+ M node_modules/shell-quote/test/quote.js
+ M notes/rule_compliance.db
+?? .pre-commit-config.yaml
+?? backend_routes.sh
+?? bump_actions_node24.sh
+?? deploy_fix.sh
+?? finish_detection.sh
+?? fix_detection_value.sh
+?? fix_repo_and_detection.sh
+?? frontend/eslint.config.js
+?? install_enforcement.sh
+?? install_enforcement.sh.txt
+?? notes/App.jsx.20260902124515.bak
+?? notes/App.jsx.20260902182127.bak
+?? notes/App.jsx.diff.20260901145319.txt
+?? notes/App.jsx.diff.20260901161355.txt
+?? notes/App.jsx.diff.20260901171703.txt
+?? notes/App.jsx.working.20260901145319.bak
+?? notes/App.jsx.working.20260901161355.bak
+?? notes/App.jsx.working.20260901171703.bak
+?? notes/artifact_gate.sh.20260902124515.bak
+?? notes/eslint.config.20260901161355.bak
+?? notes/eslint.config.20260901171703.bak
+?? notes/extracted_deploy_20260901202047.yml
+?? notes/fix_detection_20260902182127.txt
+?? notes/frontend-package.json.20260901145319.bak
+?? notes/frontend-package.json.20260901161355.bak
+?? notes/frontend-package.json.20260901171703.bak
+?? notes/frontend_eslint.config.js.20260901194537.bak
+?? notes/gitignore.20260901161355.bak
+?? notes/gitignore.20260901171703.bak
+?? notes/install_enforcement_20260901194537.txt
+?? notes/lint_and_resolve_20260901145319.txt
+?? notes/lint_and_resolve_20260901161355.txt
+?? notes/lint_and_resolve_20260901171703.txt
+?? notes/oxlintrc.20260901145319.bak
+?? notes/oxlintrc.20260901161355.bak
+?? notes/oxlintrc.20260901171703.bak
+?? notes/preflight_worktree_20260901194537.patch
+?? notes/preflight_worktree_20260901202047.patch
+?? notes/preflight_worktree_20260902182127.patch
+?? notes/preflight_worktree_20260910211715.patch
+?? notes/repair_and_unblock_20260901202047.txt
+?? notes/scripts_artifact_gate.sh.20260901202047.bak
+?? notes/scripts_artifact_gate.sh.20260902131534.bak
+?? notes/served_20260902190811.html
+?? notes/server.js.20260902124515.bak
+?? notes/staging_evidence_20260910211715.txt
+?? notes/tests_gates.bats.20260901202047.bak
+?? notes/tests_gates.bats.20260902131534.bak
+?? pages_ground_truth.sh
+?? repair_and_unblock.sh
+?? staging_evidence.sh
+?? verify_browser.sh
+
+=== RECENT COMMITS ===
+90581f1 evidence: staging report 20260910211102
+f403111 evidence: browser verification of the deployed page (20260902194331)
+431a5a4 evidence: finish verification 20260902190811
+c0052d5 fix(detection): loopback address space; single-pass rules_gate (20260902190811)
+c0d349b chore: enforcement stack (rules+artifact gates, pre-commit, eslint fix) 20260902131534
+4e41c23 evidence: detection verification 20260902124515
+d7e7c6f fix: retire 9 dead scripts, gate fix, backend LNA detection (20260902124515)
+274b154 evidence: post-bump verification 20260902121323
+f10ecc7 ci: bump Pages workflow actions to Node-24 majors before the 2026-09-16 removal (20260902121323)
+5337aab evidence: post-deploy verification 20260902120127
+
+=== CURRENT BRANCH ===
+main
+
+=== FILE LISTING (root) ===
+total 328
+drwxr-xr-x. 1 owner owner   740 Sep 10 17:11 .
+drwxr-xr-x. 1 owner owner   214 Aug 30 19:12 ..
+drwxr-xr-x. 1 owner owner   100 Aug 31 13:15 backend
+-rwxr-xr-x. 1 owner owner  8457 Sep  2 07:45 backend_routes.sh
+-rwxr-xr-x. 1 owner owner 12547 Sep  2 08:13 bump_actions_node24.sh
+-rwxr-xr-x. 1 owner owner 19521 Sep  2 08:01 deploy_fix.sh
+-rwxr-xr-x. 1 owner owner 20687 Sep  2 15:08 finish_detection.sh
+-rwxr-xr-x. 1 owner owner 24850 Sep  2 14:21 fix_detection_value.sh
+-rwxr-xr-x. 1 owner owner 39499 Sep  2 08:45 fix_repo_and_detection.sh
+drwxr-xr-x. 1 owner owner   254 Sep  2 08:03 frontend
+drwxr-xr-x. 1 owner owner   148 Sep 10 17:17 .git
+drwxr-xr-x. 1 owner owner    18 Sep  2 08:01 .github
+-rw-r--r--. 1 owner owner    36 Sep  1 10:55 .gitignore
+-rwxr-xr-x. 1 owner owner 39575 Sep  1 15:45 install_enforcement.sh
+-rw-r--r--. 1 owner owner 39575 Sep  1 15:44 install_enforcement.sh.txt
+drwxr-xr-x. 1 owner owner   646 Sep  2 15:43 node_modules
+-rw-r--r--. 1 owner owner     0 Aug 31 18:34 .nojekyll
+drwxr-xr-x. 1 owner owner  4258 Sep 10 17:17 notes
+-rw-r--r--. 1 owner owner   437 Sep  2 15:43 package.json
+-rw-r--r--. 1 owner owner 14227 Sep  2 15:43 package-lock.json
+-rwxr-xr-x. 1 owner owner 20562 Sep  1 09:34 pages_ground_truth.sh
+-rw-r--r--. 1 owner owner  1059 Sep  1 15:45 .pre-commit-config.yaml
+-rwxr-xr-x. 1 owner owner 28601 Sep  1 16:20 repair_and_unblock.sh
+drwxr-xr-x. 1 owner owner    58 Sep  2 08:45 scripts
+-rwxr-xr-x. 1 owner owner  8368 Sep 10 17:17 staging_evidence.sh
+drwxr-xr-x. 1 owner owner    54 Sep  2 14:21 tests
+-rwxr-xr-x. 1 owner owner 12960 Sep  2 15:43 verify_browser.sh
+
+=== KEY FILE HASHES ===
+package.json: 2b15d4cd32974c04d7e0eaa6f13175bc0218a8dd5a15e58be9e4f8865c62f998
+frontend/package.json: eb094ffe550fb7e9fbf81d7c3eaa56dd545c4e880c5402dc0e58c1a424775ad7
+frontend/vite.config.js: 062fda0e91a9b17e0d3f38274a801070c68cb91a4fd235b30fc22b0aa90648a6
+frontend/src/App.jsx: 80e8fec4b0c7cc9905440c4f2dec1558a032de330b959a7f08bfdeb709916419
+
+=== END REPORT ===
